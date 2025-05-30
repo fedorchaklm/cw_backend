@@ -31,10 +31,10 @@ class AuthController {
         }
     };
 
-    public me = async (_: Request, res: Response, next: NextFunction) => {
+    public me = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { id } = res.locals.tokenPayload;
-            const user = await userService.getById(id);
+            const { userId } = res.locals.tokenPayload;
+            const user = await userService.getById(userId);
             res.status(StatusCodesEnum.OK).json(user);
         } catch (e) {
             next(e);
@@ -43,7 +43,9 @@ class AuthController {
 
     public refresh = async (_: Request, res: Response, next: NextFunction) => {
         try {
+            console.log("1");
             const { userId, role } = res.locals.tokenPayload;
+            console.log({ userId, role });
             const tokens = tokenService.generateTokens({ userId, role });
             await tokenRepository.create({
                 ...tokens,

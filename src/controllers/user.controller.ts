@@ -32,18 +32,18 @@ class UserController {
         }
     };
 
-    public create = async (
-        req: Request,
-        res: Response<IUser | null>,
-        next: NextFunction,
-    ) => {
-        try {
-            const user = await userService.create(req.body);
-            res.status(StatusCodesEnum.CREATED).json(user);
-        } catch (e) {
-            next(e);
-        }
-    };
+    // public create = async (
+    //     req: Request,
+    //     res: Response<IUser | null>,
+    //     next: NextFunction,
+    // ) => {
+    //     try {
+    //         const user = await userService.create(req.body);
+    //         res.status(StatusCodesEnum.CREATED).json(user);
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // };
 
     public updateById = async (
         req: Request,

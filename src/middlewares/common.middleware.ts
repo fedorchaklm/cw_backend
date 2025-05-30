@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Joi, { ObjectSchema } from "joi";
+import { ObjectSchema } from "joi";
 import { isObjectIdOrHexString } from "mongoose";
 
 import { StatusCodesEnum } from "../enums/status-codes.enum";
@@ -27,11 +27,12 @@ class CommonMiddleware {
         return async (req: Request, _: Response, next: NextFunction) => {
             try {
                 req.body = await validator.validateAsync(req.body);
+                console.log(req.body, "validate");
                 next();
             } catch (e) {
-                if (e instanceof Joi.ValidationError) {
-                    next(new ApiError(e.details[0].message, 400));
-                }
+                // if (e instanceof Joi.ValidationError) {
+                next(new ApiError(e.details[0].message, 400));
+                // }
             }
         };
     }

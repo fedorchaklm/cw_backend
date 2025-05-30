@@ -4,6 +4,7 @@ import { config } from "../configs/config";
 import { StatusCodesEnum } from "../enums/status-codes.enum";
 import { ApiError } from "../errors/api.error";
 import { ITokenPair, ITokenPayload } from "../interfaces/token.interface";
+import { tokenRepository } from "../repositories/token.repository";
 
 class TokenService {
     public generateTokens = (payload: ITokenPayload): ITokenPair => {
@@ -44,15 +45,15 @@ class TokenService {
         }
     };
 
-    // public isTokenExist = async (
-    //     token: string,
-    //     type: "accessToken" | "refreshToken",
-    // ): Promise<boolean> => {
-    //     const iTokenPromise = await tokenRepository.findByParams({
-    //         [type]: token,
-    //     });
-    //     return !!iTokenPromise;
-    // };
+    public isTokenExist = async (
+        token: string,
+        type: "accessToken" | "refreshToken",
+    ): Promise<boolean> => {
+        const iTokenPromise = await tokenRepository.findByParams({
+            [type]: token,
+        });
+        return !!iTokenPromise;
+    };
 }
 
 export const tokenService = new TokenService();
