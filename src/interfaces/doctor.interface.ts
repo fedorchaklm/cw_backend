@@ -9,4 +9,4 @@ export interface IDoctor {
     updatedAt: Date;
 }
 
-export type IDoctorDTO = Pick<IDoctor, "name" | "email">;
+export type IDoctorDTO = Pick<IDoctor, "name" | "surname" | "email">;
