@@ -1,12 +1,16 @@
-export interface IDoctor {
+import { IBase } from "./base.interface";
+
+export interface IDoctor extends IBase {
     _id: string;
     name: string;
     surname: string;
     email: string;
     age: number;
     occupation: string;
-    createdAt: Date;
-    updatedAt: Date;
+    isDeleted: boolean;
 }
 
-export type IDoctorDTO = Pick<IDoctor, "name" | "surname" | "email">;
+export type IDoctorCreateDTO = Pick<
+    IDoctor,
+    "name" | "surname" | "age" | "email" | "occupation"
+>;

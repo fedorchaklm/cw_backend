@@ -1,4 +1,4 @@
-import { IDoctor, IDoctorDTO } from "../interfaces/doctor.interface";
+import { IDoctor, IDoctorCreateDTO } from "../interfaces/doctor.interface";
 import { Doctor } from "../models/doctor.model";
 
 class DoctorRepository {
@@ -10,11 +10,14 @@ class DoctorRepository {
         return Doctor.findById(id);
     }
 
-    public create(doctor: IDoctorDTO): Promise<IDoctor> {
+    public create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
         return Doctor.create(doctor);
     }
 
-    public updateById(doctorId: string, doctor: IDoctorDTO): Promise<IDoctor> {
+    public updateById(
+        doctorId: string,
+        doctor: IDoctorCreateDTO,
+    ): Promise<IDoctor> {
         return Doctor.findByIdAndUpdate(doctorId, doctor, { new: true });
     }
 

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { StatusCodesEnum } from "../enums/status-codes.enum";
-import { IDoctor, IDoctorDTO } from "../interfaces/doctor.interface";
+import { IDoctor, IDoctorCreateDTO } from "../interfaces/doctor.interface";
 import { doctorService } from "../services/doctor.service";
 
 class DoctorController {
@@ -38,7 +38,7 @@ class DoctorController {
         next: NextFunction,
     ) {
         try {
-            const doctor = req.body as IDoctorDTO;
+            const doctor = req.body as IDoctorCreateDTO;
             const doctors = await doctorService.create(doctor);
             res.status(StatusCodesEnum.CREATED).json(doctors);
         } catch (e) {
@@ -53,7 +53,7 @@ class DoctorController {
     ) {
         try {
             const { id } = req.params;
-            const doctor = req.body as IDoctorDTO;
+            const doctor = req.body as IDoctorCreateDTO;
             const updatedDoctor = await doctorService.updateById(id, doctor);
             res.status(StatusCodesEnum.OK).json(updatedDoctor);
         } catch (e) {

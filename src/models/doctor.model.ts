@@ -9,6 +9,7 @@ const doctorSchema = new Schema(
         email: { type: String, required: true, unique: true },
         occupation: { type: String, required: true },
         age: { type: Number, required: true },
+        isDeleted: { type: Boolean, default: false },
     },
     { timestamps: true, versionKey: false },
 );
