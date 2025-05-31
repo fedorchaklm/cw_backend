@@ -4,7 +4,7 @@ import { ProcedureQueryOrderEnum } from "../enums/procedure-query-order.enum";
 import { RegexEnum } from "../enums/regex.enum";
 
 export class ClinicValidator {
-    private static name = Joi.string().regex(RegexEnum.NAME);
+    private static name = Joi.string().regex(RegexEnum.PROCEDURE_NAME);
     private static address = Joi.string().regex(RegexEnum.PROCEDURE_NAME);
     private static phone = Joi.string().regex(RegexEnum.PHONE);
     private static email = Joi.string().email();

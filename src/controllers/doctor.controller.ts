@@ -48,6 +48,7 @@ class DoctorController {
     ) {
         try {
             const doctor = req.body as IDoctorCreateDTO;
+            console.log({ doctor });
             console.log(">", { doctor });
             let clinics = [];
 
@@ -93,8 +94,8 @@ class DoctorController {
             });
             res.status(StatusCodesEnum.CREATED).json({
                 ...data,
-                clinics,
-                procedures,
+                clinics: doctor.clinics,
+                procedures: doctor.procedures,
             });
         } catch (e) {
             next(e);

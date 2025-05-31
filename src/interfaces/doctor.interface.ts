@@ -8,7 +8,6 @@ export interface IDoctor extends IBase {
     age: number;
     email: string;
     phone: string;
-    specialty: string;
     experience: number;
     clinics: Array<string>;
     procedures: Array<string>;

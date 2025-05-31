@@ -9,7 +9,6 @@ const doctorSchema = new Schema(
         age: { type: Number, required: true },
         email: { type: String, required: true, unique: true },
         phone: { type: String, required: true, unique: true },
-        specialty: { type: String, required: true },
         experience: { type: Number, required: true },
         clinics: [
             { type: Schema.Types.ObjectId, required: true, ref: "clinic" },
