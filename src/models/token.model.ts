@@ -1,5 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
+import { IToken } from "../interfaces/token.interface";
 import { User } from "./user.model";
 
 const tokenSchema = new Schema(
@@ -11,4 +12,4 @@ const tokenSchema = new Schema(
     { timestamps: true, versionKey: false },
 );
 
-export const Token = mongoose.model("tokens", tokenSchema);
+export const Token = model<IToken>("tokens", tokenSchema);

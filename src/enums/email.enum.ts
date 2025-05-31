@@ -1,5 +1,5 @@
 export enum EmailEnum {
-    WELCOME = "welcome",
+    // WELCOME = "welcome",
     ACTIVATE = "activate",
     RECOVERY = "recovery",
 }

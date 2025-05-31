@@ -1,39 +1,39 @@
 import { Router } from "express";
 
-import { doctorController } from "../controllers/doctor.controller";
+import { clinicController } from "../controllers/clinic.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
-import { DoctorValidator } from "../validators/doctor.validator";
+import { ClinicValidator } from "../validators/clinic.validator";
 
 const router = Router();
 
 router.get(
     "/",
     authMiddleware.checkAccessToken,
-    commonMiddleware.query(DoctorValidator.query),
-    doctorController.getAll,
+    commonMiddleware.query(ClinicValidator.query),
+    clinicController.getAll,
 );
 router.post(
     "/",
-    commonMiddleware.validateBody(DoctorValidator.create),
-    doctorController.create,
+    commonMiddleware.validateBody(ClinicValidator.create),
+    clinicController.create,
 );
 router.get(
     "/:id",
     commonMiddleware.isValidate("id"),
     authMiddleware.checkAccessToken,
-    doctorController.getById,
+    clinicController.getById,
 );
 router.put(
     "/:id",
     commonMiddleware.isValidate("id"),
-    commonMiddleware.validateBody(DoctorValidator.update),
-    doctorController.updateById,
+    commonMiddleware.validateBody(ClinicValidator.update),
+    clinicController.updateById,
 );
 router.delete(
     "/:id",
     commonMiddleware.isValidate("id"),
-    doctorController.deleteById,
+    clinicController.deleteById,
 );
 
-export const doctorRouter = router;
+export const clinicRouter = router;

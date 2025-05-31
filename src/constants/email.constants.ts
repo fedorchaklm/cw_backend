@@ -10,10 +10,10 @@ export type EmailDataType = {
 // };
 
 export const emailConstants: Record<EmailEnum, EmailDataType> = {
-    [EmailEnum.WELCOME]: {
-        subject: "Welcome",
-        template: "welcome",
-    },
+    // [EmailEnum.WELCOME]: {
+    //     subject: "Welcome",
+    //     template: "welcome",
+    // },
 
     [EmailEnum.ACTIVATE]: {
         subject: "Activate Account",
