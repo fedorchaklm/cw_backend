@@ -7,6 +7,7 @@ export interface IUser extends IBase {
     email: string;
     password: string;
     role: string;
+    isActive: boolean;
     isDeleted: boolean;
     isVerified: boolean;
 }

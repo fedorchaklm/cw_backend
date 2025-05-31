@@ -56,6 +56,56 @@ class AuthController {
             next(e);
         }
     };
+
+    public activate = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const { token } = req.params;
+            const user = await authService.activate(token);
+            res.status(StatusCodesEnum.OK).json(user);
+        } catch (e) {
+            next(e);
+        }
+    };
+
+    public passwordRecoveryRequest = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const { email } = req.params;
+            const user = await userService.getByEmail(email);
+
+            if (user) {
+                await authService.passwordRecoveryRequest(user);
+            }
+
+            res.status(StatusCodesEnum.OK).json({
+                details: "Check your email",
+            });
+        } catch (e) {
+            next(e);
+        }
+    };
+
+    public recoveryPassword = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const { token } = req.params;
+            const { password } = req.body;
+            const user = authService.recoveryPassword(token, password);
+            res.status(StatusCodesEnum.OK).json(user);
+        } catch (e) {
+            next(e);
+        }
+    };
 }
 
 export const authController = new AuthController();

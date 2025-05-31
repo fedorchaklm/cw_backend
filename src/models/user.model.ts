@@ -15,6 +15,7 @@ const UserSchema = new Schema(
             required: true,
             default: RoleEnum.USER,
         },
+        isActive: { type: Boolean, default: false },
         isDeleted: { type: Boolean, default: false },
         IsVerified: { type: Boolean, default: false },
     },

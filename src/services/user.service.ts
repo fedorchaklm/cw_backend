@@ -1,10 +1,6 @@
 import { StatusCodesEnum } from "../enums/status-codes.enum";
 import { ApiError } from "../errors/api.error";
-import {
-    IUser,
-    IUserCreateDTO,
-    IUserUpdateDTO,
-} from "../interfaces/user.interface";
+import { IUser, IUserCreateDTO } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
 
 class UserService {
@@ -26,7 +22,7 @@ class UserService {
 
     public updateById = async (
         id: string,
-        user: IUserUpdateDTO,
+        user: Partial<IUser>,
     ): Promise<IUser | null> => {
         const data = await userRepository.getById(id);
         if (data === null) {
@@ -34,6 +30,22 @@ class UserService {
         }
         return await userRepository.updateById(id, user);
     };
+
+    // public partialUpdateById = async (
+    //     id: string,
+    //     user: Partial<IUser>,
+    // ): Promise<IUser> => {
+    //     const data = await userRepository.getById(id);
+    //     if (data === null) {
+    //         throw new ApiError("User not found", StatusCodesEnum.NOT_FOUND);
+    //     }
+    //
+    //     const updatedUser = await userRepository.partialUpdateById(id, user);
+    //     if (updatedUser === null) {
+    //         throw new ApiError("User not found", StatusCodesEnum.NOT_FOUND);
+    //     }
+    //     return updatedUser;
+    // };
 
     public deleteById = async (id: string): Promise<IUser | null> => {
         const user = await userRepository.getById(id);
@@ -52,6 +64,15 @@ class UserService {
                 StatusCodesEnum.BAD_REQUEST,
             );
         }
+    };
+
+    public isActive = async (id: string): Promise<boolean> => {
+        const user = await this.getById(id);
+        return user.isActive;
+    };
+
+    public getByEmail = async (email: string): Promise<IUser | null> => {
+        return await userRepository.findByEmail(email);
     };
 }
 

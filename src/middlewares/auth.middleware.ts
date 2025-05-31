@@ -2,9 +2,11 @@ import { NextFunction, Request, Response } from "express";
 
 import { RoleEnum } from "../enums/role.enum";
 import { StatusCodesEnum } from "../enums/status-codes.enum";
+import { TokenTypeEnum } from "../enums/token-type.enum";
 import { ApiError } from "../errors/api.error";
 import { ITokenPayload } from "../interfaces/token.interface";
 import { tokenService } from "../services/token.service";
+import { userService } from "../services/user.service";
 
 class AuthMiddleware {
     public checkAccessToken = async (
@@ -32,7 +34,7 @@ class AuthMiddleware {
             }
             const isTokenExist = await tokenService.isTokenExist(
                 accessToken,
-                "accessToken",
+                TokenTypeEnum.ACCESS,
             );
 
             if (!isTokenExist) {
@@ -44,11 +46,20 @@ class AuthMiddleware {
 
             const tokenPayload = tokenService.verifyToken(
                 accessToken,
-                "accessToken",
+                TokenTypeEnum.ACCESS,
             );
 
-            // req.res.locals.tokenPayload = tokenPayload;
-            res.locals.tokenPayload = tokenPayload;
+            const isActive = await userService.isActive(tokenPayload.userId);
+
+            if (!isActive) {
+                throw new ApiError(
+                    "Account is not active",
+                    StatusCodesEnum.FORBIDDEN,
+                );
+            }
+
+            req.res.locals.tokenPayload = tokenPayload;
+            // res.locals.tokenPayload = tokenPayload;
 
             next();
         } catch (e) {
@@ -73,7 +84,7 @@ class AuthMiddleware {
 
             const isTokenExist = await tokenService.isTokenExist(
                 refreshToken,
-                "refreshToken",
+                TokenTypeEnum.REFRESH,
             );
 
             if (!isTokenExist) {
@@ -85,7 +96,7 @@ class AuthMiddleware {
 
             const tokenPayload = tokenService.verifyToken(
                 refreshToken,
-                "refreshToken",
+                TokenTypeEnum.REFRESH,
             );
 
             // req.res.locals.tokenPayload = tokenPayload;
