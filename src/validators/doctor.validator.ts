@@ -24,16 +24,16 @@ export class DoctorValidator {
         procedures: this.procedures.required(),
     });
 
-    public static update = Joi.object({
-        name: this.name.required(),
-        surname: this.surname.required(),
-        age: this.age.required(),
-        email: this.email.required(),
-        phone: this.phone.required(),
-        experience: this.experience.required(),
-        clinics: this.clinics.required(),
-        procedures: this.procedures.required(),
-    });
+    // public static update = Joi.object({
+    //     name: this.name.required(),
+    //     surname: this.surname.required(),
+    //     age: this.age.required(),
+    //     email: this.email.required(),
+    //     phone: this.phone.required(),
+    //     experience: this.experience.required(),
+    //     clinics: this.clinics.required(),
+    //     procedures: this.procedures.required(),
+    // });
 
     public static query = Joi.object({
         pageSize: Joi.number().min(1).max(100).default(10),

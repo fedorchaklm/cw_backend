@@ -51,7 +51,9 @@ class DoctorRepository {
         doctorId: string,
         doctor: Partial<IDoctor>,
     ): Promise<IDoctor> {
-        return Doctor.findByIdAndUpdate(doctorId, doctor, { new: true });
+        return Doctor.findByIdAndUpdate(doctorId, doctor, { new: true })
+            .populate("clinics")
+            .populate("procedures");
     }
 
     public deleteById(doctorId: string): Promise<IDoctor> {

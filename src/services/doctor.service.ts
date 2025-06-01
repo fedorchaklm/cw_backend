@@ -23,23 +23,45 @@ class DoctorService {
         };
     };
 
-    public getById(id: string): Promise<IDoctor> {
-        return doctorRepository.getById(id);
+    public async getById(id: string): Promise<IDoctor> {
+        const doctor = await doctorRepository.getById(id);
+        if (doctor === null) {
+            throw new ApiError(
+                `Doctor with such id ${id} not found!`,
+                StatusCodesEnum.NOT_FOUND,
+            );
+        }
+        return doctor;
     }
 
     public create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
         return doctorRepository.create(doctor);
     }
 
-    public updateById(
+    public async updateById(
         doctorId: string,
         doctor: Partial<IDoctor>,
     ): Promise<IDoctor> {
-        return doctorRepository.updateById(doctorId, doctor);
+        const existedDoctor = await doctorRepository.getById(doctorId);
+        if (existedDoctor === null) {
+            throw new ApiError(
+                `Doctor with such id ${doctorId} not found!`,
+                StatusCodesEnum.NOT_FOUND,
+            );
+        }
+        return await doctorRepository.updateById(doctorId, doctor);
     }
 
-    public deleteById(doctorId: string): Promise<IDoctor> {
-        return doctorRepository.deleteById(doctorId);
+    public async deleteById(doctorId: string): Promise<IDoctor> {
+        const doctor = await doctorRepository.getById(doctorId);
+
+        if (doctor === null) {
+            throw new ApiError(
+                `Doctor with such id ${doctorId} not found!`,
+                StatusCodesEnum.NOT_FOUND,
+            );
+        }
+        return await doctorRepository.deleteById(doctorId);
     }
 
     public isEmailUnique = async (email: string) => {

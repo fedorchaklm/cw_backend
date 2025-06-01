@@ -46,8 +46,7 @@ class DoctorController {
     ) {
         try {
             const doctor = req.body as IDoctorCreateDTO;
-            console.log({ doctor });
-            console.log(">", { doctor });
+            console.log(">1", { doctor, procedures: doctor.procedures });
             await doctorService.isEmailUnique(doctor.email);
             // const clinicIds = await clinicService.getClinicsIdsFromNames(
             //     doctor.clinics,
@@ -68,6 +67,7 @@ class DoctorController {
             //     procedures: doctor.procedures,
             // });
             const data = await doctorService.create(doctor);
+            console.log(">2", { data, procedures: data.procedures });
             await clinicService.addDoctorToClinics(data._id, doctor.clinics);
             await clinicService.addProcedureToClinic(
                 doctor.clinics,
@@ -86,6 +86,7 @@ class DoctorController {
     ) {
         try {
             const { id } = req.params;
+            console.log({ id });
             const doctor = req.body as IDoctorCreateDTO;
             const updatedDoctor = await doctorService.updateById(id, doctor);
             res.status(StatusCodesEnum.OK).json(updatedDoctor);

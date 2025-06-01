@@ -24,10 +24,10 @@ router.get(
     authMiddleware.checkAccessToken,
     doctorController.getById,
 );
-router.put(
+router.patch(
     "/:id",
     commonMiddleware.isValidate("id"),
-    commonMiddleware.validateBody(DoctorValidator.update),
+    // commonMiddleware.validateBody(DoctorValidator.update),
     doctorController.updateById,
 );
 router.delete(

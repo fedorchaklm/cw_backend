@@ -46,8 +46,8 @@ class ProcedureService {
         procedureId: string,
         procedure: Partial<IProcedure>,
     ): Promise<IProcedure> {
-        const existsProcedure = await procedureRepository.getById(procedureId);
-        if (existsProcedure === null) {
+        const existedProcedure = await procedureRepository.getById(procedureId);
+        if (existedProcedure === null) {
             throw new ApiError(
                 `Procedure with such id ${procedureId} not found!`,
                 StatusCodesEnum.NOT_FOUND,

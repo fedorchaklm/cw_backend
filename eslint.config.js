@@ -8,7 +8,7 @@ import importSortPlugin from "eslint-plugin-simple-import-sort";
 export default [
     {
         files: ["**/*.ts"],
-        ignores: ["eslint.config.js", "dist/**"],
+        ignores: ["eslint.config.js", "dist/**", "**/*.test.ts"],
         languageOptions: {
             ecmaVersion: "latest",
             sourceType: "module",
