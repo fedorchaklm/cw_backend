@@ -2,7 +2,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const environment = process.env.NODE_ENV ?? "dev";
+
 interface IConfig {
+    ENV: string;
     PORT: string;
     MONGO_URI: string;
     JWT_ACCESS_SECRET: string;
@@ -19,6 +22,7 @@ interface IConfig {
 }
 
 export const config: IConfig = {
+    ENV: environment,
     PORT: process.env.PORT,
     MONGO_URI: process.env.MONGO_URI ?? "mongodb://localhost:27017",
     // MONGO_URI: process.env.MONGO_URI ?? 'mongodb://localhost:27017',

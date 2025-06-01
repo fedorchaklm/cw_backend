@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { StatusCodesEnum } from "../enums/status-codes.enum";
+import { ApiError } from "../errors/api.error";
 import {
     IClinic,
     IClinicCreateDTO,
@@ -45,6 +46,13 @@ class ClinicController {
     ) {
         try {
             const clinic = req.body;
+            const clinicDuplicate = await clinicService.getByName(clinic.name);
+            if (clinicDuplicate) {
+                throw new ApiError(
+                    `Clinic ${clinicDuplicate.name} already exists!`,
+                    StatusCodesEnum.BAD_REQUEST,
+                );
+            }
             const data = await clinicService.create({
                 ...clinic,
                 doctors: [],

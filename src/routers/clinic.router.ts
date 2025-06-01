@@ -24,7 +24,7 @@ router.get(
     authMiddleware.checkAccessToken,
     clinicController.getById,
 );
-router.put(
+router.patch(
     "/:id",
     commonMiddleware.isValidate("id"),
     commonMiddleware.validateBody(ClinicValidator.update),

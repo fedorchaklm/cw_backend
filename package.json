@@ -6,7 +6,7 @@
   "scripts": {
     "start": "rimraf dist && tsc-watch --onSuccess \"npm run watch:server\"",
     "watch:server": "tsx src/main.ts --watch",
-    "test": "jest"
+    "test": "cross-env NODE_ENV=test jest --maxWorkers=1"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -43,7 +43,8 @@
     "ts-jest": "^29.2.5",
     "tsc-watch": "^7.1.1",
     "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "cross-env": "^7.0.3"
   },
   "author": "",
   "license": "ISC",

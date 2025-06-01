@@ -2,6 +2,7 @@
 /*eslint-disable @typescript-eslint/no-unused-vars*/
 
 import express, { NextFunction, Request, Response } from "express";
+import { Server } from "http";
 import mongoose from "mongoose";
 
 import { config } from "./configs/config";
@@ -39,17 +40,30 @@ const dbConnection = async () => {
     }
 };
 
-export const start = async () => {
-    try {
-        await dbConnection();
-        app.listen(config.PORT, () => {
-            console.log(`Server is running on http://localhost:${config.PORT}`);
-        });
-    } catch (e) {
-        console.error("MongoDB connection failed");
-    }
+export const disconnectDB = async () => {
+    await mongoose.connection.close();
 };
 
-// start();
+// // start();
+let server: Server;
+
+export const startServer = async () => {
+    await dbConnection();
+    server = app.listen(config.PORT, () => {
+        console.log(`Server is running on http://localhost:${config.PORT}`);
+    });
+    return server;
+};
+
+export const stopServer = async () => {
+    if (server != null) {
+        server.close();
+    }
+    await disconnectDB();
+};
+
+if (config.ENV !== "test") {
+    startServer();
+}
 
 export default app;

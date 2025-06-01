@@ -9,8 +9,8 @@ export class ClinicValidator {
     private static phone = Joi.string().regex(RegexEnum.PHONE);
     private static email = Joi.string().email();
     private static description = Joi.string().regex(RegexEnum.PROCEDURE_NAME);
-    private static doctors = Joi.array();
-    private static procedures = Joi.array();
+    // private static doctors = Joi.array();
+    // private static procedures = Joi.array();
 
     public static create = Joi.object({
         name: this.name.required(),
@@ -28,8 +28,8 @@ export class ClinicValidator {
         phone: this.phone.required(),
         email: this.email.required(),
         description: this.description.required(),
-        doctors: this.doctors.required(),
-        procedures: this.procedures.required(),
+        // doctors: this.doctors.required(),
+        // procedures: this.procedures.required(),
     });
 
     public static query = Joi.object({
