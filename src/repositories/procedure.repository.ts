@@ -26,11 +26,11 @@ class ProcedureRepository {
         ]);
     };
 
-    public getById(id: string): Promise<IProcedure> {
+    public getById(id: string): Promise<IProcedure | null> {
         return Procedure.findById(id);
     }
 
-    public getByName(name: string): Promise<IProcedure> {
+    public getByName(name: string): Promise<IProcedure | null> {
         return Procedure.findOne({ name });
     }
 

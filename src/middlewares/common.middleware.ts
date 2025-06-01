@@ -27,7 +27,6 @@ class CommonMiddleware {
         return async (req: Request, _: Response, next: NextFunction) => {
             try {
                 req.body = await validator.validateAsync(req.body);
-                console.log(req.body, "validate");
                 next();
             } catch (e) {
                 // if (e instanceof Joi.ValidationError) {

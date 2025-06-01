@@ -39,7 +39,7 @@ const dbConnection = async () => {
     }
 };
 
-const start = async () => {
+export const start = async () => {
     try {
         await dbConnection();
         app.listen(config.PORT, () => {
@@ -50,4 +50,6 @@ const start = async () => {
     }
 };
 
-start();
+// start();
+
+export default app;

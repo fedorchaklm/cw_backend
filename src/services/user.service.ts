@@ -57,7 +57,6 @@ class UserService {
 
     public isEmailUnique = async (email: string) => {
         const user = await userRepository.findByEmail(email);
-
         if (user !== null) {
             throw new ApiError(
                 "User is already exists",

@@ -23,8 +23,15 @@ class ProcedureService {
         };
     };
 
-    public getById(id: string): Promise<IProcedure> {
-        return procedureRepository.getById(id);
+    public async getById(id: string): Promise<IProcedure> {
+        const procedure = await procedureRepository.getById(id);
+        if (procedure === null) {
+            throw new ApiError(
+                `Procedure with such id ${id} not found!`,
+                StatusCodesEnum.NOT_FOUND,
+            );
+        }
+        return procedure;
     }
 
     public getByName(name: string): Promise<IProcedure> {
@@ -35,11 +42,18 @@ class ProcedureService {
         return procedureRepository.create(clinic);
     }
 
-    public updateById(
+    public async updateById(
         procedureId: string,
         procedure: Partial<IProcedure>,
     ): Promise<IProcedure> {
-        return procedureRepository.updateById(procedureId, procedure);
+        const existsProcedure = await procedureRepository.getById(procedureId);
+        if (existsProcedure === null) {
+            throw new ApiError(
+                `Procedure with such id ${procedureId} not found!`,
+                StatusCodesEnum.NOT_FOUND,
+            );
+        }
+        return await procedureRepository.updateById(procedureId, procedure);
     }
 
     public async deleteById(procedureId: string): Promise<IProcedure> {
@@ -47,32 +61,29 @@ class ProcedureService {
 
         if (procedure === null) {
             throw new ApiError(
-                "Procedure not found",
+                `Procedure with such id ${procedureId} not found!`,
                 StatusCodesEnum.NOT_FOUND,
             );
         }
         return await procedureRepository.deleteById(procedureId);
     }
 
-    public async getProceduresIdsFromNames(
-        procedureNames: Array<string>,
-    ): Promise<Array<string>> {
-        const procedureIds = [];
-        for (const name of procedureNames) {
-            const procedure = await this.getByName(name);
-            console.log({ procedure });
-            if (!procedure) {
-                console.log(">", "no clinic found");
-                throw new ApiError(
-                    `Procedure '${name}' was not found`,
-                    StatusCodesEnum.NOT_FOUND,
-                );
-            }
-            procedureIds.push(procedure._id);
-            console.log({ procedureIds });
-        }
-        return procedureIds;
-    }
+    // public async getProceduresIdsFromNames(
+    //     procedureNames: Array<string>,
+    // ): Promise<Array<string>> {
+    //     const procedureIds = [];
+    //     for (const name of procedureNames) {
+    //         const procedure = await this.getByName(name);
+    //         if (!procedure) {
+    //             throw new ApiError(
+    //                 `Procedure '${name}' was not found`,
+    //                 StatusCodesEnum.NOT_FOUND,
+    //             );
+    //         }
+    //         procedureIds.push(procedure._id);
+    //     }
+    //     return procedureIds;
+    // }
 }
 
 export const procedureService = new ProcedureService();

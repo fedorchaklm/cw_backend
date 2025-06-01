@@ -15,6 +15,7 @@ router.get(
 );
 router.post(
     "/",
+    authMiddleware.checkAccessToken,
     commonMiddleware.validateBody(ProcedureValidator.create),
     procedureController.create,
 );
@@ -24,7 +25,7 @@ router.get(
     authMiddleware.checkAccessToken,
     procedureController.getById,
 );
-router.put(
+router.patch(
     "/:id",
     commonMiddleware.isValidate("id"),
     commonMiddleware.validateBody(ProcedureValidator.update),

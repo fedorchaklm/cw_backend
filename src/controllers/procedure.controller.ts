@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { StatusCodesEnum } from "../enums/status-codes.enum";
+import { ApiError } from "../errors/api.error";
 import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
 import {
     IProcedure,
@@ -45,6 +46,15 @@ class ProcedureController {
     ) {
         try {
             const procedure = req.body as IProcedureCreateDTO;
+            const procedureDuplicate = await procedureService.getByName(
+                procedure.name,
+            );
+            if (procedureDuplicate) {
+                throw new ApiError(
+                    `Procedure ${procedureDuplicate.name} already exists!`,
+                    StatusCodesEnum.BAD_REQUEST,
+                );
+            }
             const data = await procedureService.create(procedure);
             res.status(StatusCodesEnum.CREATED).json(data);
         } catch (e) {
