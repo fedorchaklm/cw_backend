@@ -11,7 +11,7 @@ export interface IDoctor extends IBase {
     experience: number;
     clinics: Array<string>;
     procedures: Array<string>;
-    isDeleted: boolean;
+    // isDeleted: boolean;
 }
 
 export interface IDoctorQuery {

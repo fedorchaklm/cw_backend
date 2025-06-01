@@ -18,7 +18,7 @@ class DoctorRepository {
             filterObject.name = { $regex: query.name, $options: "i" };
         }
         if (query.surname) {
-            filterObject.price = { $regex: query.surname, $options: "i" };
+            filterObject.surname = { $regex: query.surname, $options: "i" };
         }
         if (query.email) {
             filterObject.email = { $regex: query.email, $options: "i" };
@@ -57,6 +57,10 @@ class DoctorRepository {
     public deleteById(doctorId: string): Promise<IDoctor> {
         return Doctor.findByIdAndDelete(doctorId);
     }
+
+    public findByEmail = (email: string): Promise<IDoctor | null> => {
+        return Doctor.findOne({ email });
+    };
 }
 
 export const doctorRepository = new DoctorRepository();

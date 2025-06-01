@@ -10,7 +10,7 @@ export interface IClinic extends IBase {
     description: string;
     procedures: Array<string>;
     doctors: Array<string>;
-    isDeleted: boolean;
+    // isDeleted: boolean;
 }
 
 // export interface IClinicWithPopulate extends IBase {

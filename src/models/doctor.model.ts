@@ -8,7 +8,7 @@ const doctorSchema = new Schema(
         surname: { type: String, required: true },
         age: { type: Number, required: true },
         email: { type: String, required: true, unique: true },
-        phone: { type: String, required: true, unique: true },
+        phone: { type: String, required: true },
         experience: { type: Number, required: true },
         clinics: [
             { type: Schema.Types.ObjectId, required: true, ref: "clinic" },
@@ -16,7 +16,7 @@ const doctorSchema = new Schema(
         procedures: [
             { type: Schema.Types.ObjectId, required: true, ref: "procedure" },
         ],
-        isDeleted: { type: Boolean, default: false },
+        // isDeleted: { type: Boolean, default: false },
     },
     { timestamps: true, versionKey: false },
 );

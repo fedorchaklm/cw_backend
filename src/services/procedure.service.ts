@@ -53,6 +53,26 @@ class ProcedureService {
         }
         return await procedureRepository.deleteById(procedureId);
     }
+
+    public async getProceduresIdsFromNames(
+        procedureNames: Array<string>,
+    ): Promise<Array<string>> {
+        const procedureIds = [];
+        for (const name of procedureNames) {
+            const procedure = await this.getByName(name);
+            console.log({ procedure });
+            if (!procedure) {
+                console.log(">", "no clinic found");
+                throw new ApiError(
+                    `Procedure '${name}' was not found`,
+                    StatusCodesEnum.NOT_FOUND,
+                );
+            }
+            procedureIds.push(procedure._id);
+            console.log({ procedureIds });
+        }
+        return procedureIds;
+    }
 }
 
 export const procedureService = new ProcedureService();

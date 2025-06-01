@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
 import { StatusCodesEnum } from "../enums/status-codes.enum";
-import { ApiError } from "../errors/api.error";
 import {
     IDoctor,
     IDoctorCreateDTO,
@@ -10,7 +9,6 @@ import {
 import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
 import { clinicService } from "../services/clinic.service";
 import { doctorService } from "../services/doctor.service";
-import { procedureService } from "../services/procedure.service";
 
 class DoctorController {
     public async getAll(
@@ -50,53 +48,32 @@ class DoctorController {
             const doctor = req.body as IDoctorCreateDTO;
             console.log({ doctor });
             console.log(">", { doctor });
-            let clinics = [];
-
-            for (const name of doctor.clinics) {
-                const clinic = await clinicService.getByName(name);
-                console.log({ clinic });
-                if (!clinic) {
-                    console.log(">", "no clinic found");
-                    // const addedClinic = await clinicService.create({
-                    //     ...clinic,
-                    //     procedures: [],
-                    //     doctors: [],
-                    // });
-                    // console.log({ addedClinic });
-                    // clinics.push(addedClinic._id);
-                    throw new ApiError(
-                        "Clinic was not found",
-                        StatusCodesEnum.NOT_FOUND,
-                    );
-                }
-                clinics.push(clinic._id);
-                console.log({ clinics });
-            }
-            let procedures = [];
-            for (const name of doctor.procedures) {
-                const procedure = await procedureService.getByName(name);
-
-                if (!procedure) {
-                    // const addedProcedure =
-                    //     await procedureService.create(procedure);
-                    // procedures.push(addedProcedure._id);
-                    throw new ApiError(
-                        "Procedure was not found",
-                        StatusCodesEnum.NOT_FOUND,
-                    );
-                }
-                procedures.push(procedure._id);
-            }
-            const data = await doctorService.create({
-                ...doctor,
-                clinics,
-                procedures,
-            });
-            res.status(StatusCodesEnum.CREATED).json({
-                ...data,
-                clinics: doctor.clinics,
-                procedures: doctor.procedures,
-            });
+            await doctorService.isEmailUnique(doctor.email);
+            // const clinicIds = await clinicService.getClinicsIdsFromNames(
+            //     doctor.clinics,
+            // );
+            // const procedureIds =
+            //     await procedureService.getProceduresIdsFromNames(
+            //         doctor.procedures,
+            //     );
+            // const data = await doctorService.create({
+            //     ...doctor,
+            //     clinics: doctor.clinics,
+            //     procedures: doctor.procedures,
+            // });
+            // await clinicService.addDoctorToClinics(data._id, doctor.clinics);
+            // res.status(StatusCodesEnum.CREATED).json({
+            //     ...data,
+            //     clinics: doctor.clinics,
+            //     procedures: doctor.procedures,
+            // });
+            const data = await doctorService.create(doctor);
+            await clinicService.addDoctorToClinics(data._id, doctor.clinics);
+            await clinicService.addProcedureToClinic(
+                doctor.clinics,
+                doctor.procedures,
+            );
+            res.status(StatusCodesEnum.CREATED).json(data);
         } catch (e) {
             next(e);
         }

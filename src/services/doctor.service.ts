@@ -1,3 +1,5 @@
+import { StatusCodesEnum } from "../enums/status-codes.enum";
+import { ApiError } from "../errors/api.error";
 import {
     IDoctor,
     IDoctorCreateDTO,
@@ -39,6 +41,17 @@ class DoctorService {
     public deleteById(doctorId: string): Promise<IDoctor> {
         return doctorRepository.deleteById(doctorId);
     }
+
+    public isEmailUnique = async (email: string) => {
+        const doctor = await doctorRepository.findByEmail(email);
+
+        if (doctor !== null) {
+            throw new ApiError(
+                "Doctor is already exists",
+                StatusCodesEnum.BAD_REQUEST,
+            );
+        }
+    };
 }
 
 export const doctorService = new DoctorService();
