@@ -200,6 +200,67 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/auth/me": {
+            get: {
+                tags: ["Auth"],
+                summary: "Get current authorized user",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Get current authorized user successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        user: {
+                                            type: "object",
+                                            properties: {
+                                                _id: { type: "string" },
+                                                name: { type: "string" },
+                                                surname: { type: "string" },
+                                                email: { type: "string" },
+                                                role: { type: "string" },
+                                                isActive: { type: "boolean" },
+                                                isVerified: { type: "boolean" },
+                                                createdAt: { type: "string" },
+                                                updatedAt: { type: "string" },
+                                            },
+                                        },
+                                        tokens: {
+                                            type: "object",
+                                            properties: {
+                                                accessToken: { type: "string" },
+                                                refreshToken: {
+                                                    type: "string",
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "401": {
+                        description: "Unauthorized",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 400,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/clinics": {
             get: {
                 tags: ["Clinic"],
@@ -488,6 +549,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                     },
                                     email: {
                                         type: "string",
+                                        format: "email",
                                     },
                                     description: {
                                         type: "string",
@@ -872,7 +934,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 properties: {
                                     name: { type: "string" },
                                     surname: { type: "string" },
-                                    email: { type: "string" },
+                                    email: { type: "string", format: "email" },
                                     phone: { type: "string" },
                                     experience: { type: "string" },
                                     age: { type: "integer" },
@@ -914,7 +976,9 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         _id: { type: "string" },
                                         name: { type: "string" },
                                         surname: { type: "string" },
-                                        email: { type: "string" },
+                                        email: {
+                                            type: "string",
+                                        },
                                         phone: { type: "string" },
                                         experience: { type: "string" },
                                         age: { type: "integer" },
@@ -1134,7 +1198,9 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                             isActive: { type: "boolean" },
                                             _id: { type: "string" },
                                             name: { type: "string" },
-                                            email: { type: "string" },
+                                            email: {
+                                                type: "string",
+                                            },
                                             surname: { type: "string" },
                                             role: { type: "string" },
                                             isVerified: { type: "boolean" },
@@ -1170,7 +1236,9 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        email: { type: "string" },
+                                        email: {
+                                            type: "string",
+                                        },
                                         role: { type: "string" },
                                         name: { type: "string" },
                                         surname: { type: "string" },
