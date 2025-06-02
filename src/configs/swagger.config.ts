@@ -859,6 +859,104 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/doctors/post": {
+            post: {
+                tags: ["Doctor"],
+                summary: "Create doctor",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    surname: { type: "string" },
+                                    email: { type: "string" },
+                                    phone: { type: "string" },
+                                    experience: { type: "string" },
+                                    age: { type: "integer" },
+                                    procedures: {
+                                        type: "array",
+                                        items: {
+                                            type: "string",
+                                        },
+                                    },
+                                    clinics: {
+                                        type: "array",
+                                        items: {
+                                            type: "string",
+                                        },
+                                    },
+                                },
+                                required: [
+                                    "name",
+                                    "surname",
+                                    "email",
+                                    "phone",
+                                    "experience",
+                                    "age",
+                                    "procedures",
+                                    "clinics",
+                                ],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Create doctor successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                        surname: { type: "string" },
+                                        email: { type: "string" },
+                                        phone: { type: "string" },
+                                        experience: { type: "string" },
+                                        age: { type: "integer" },
+                                        procedures: {
+                                            type: "array",
+                                            items: {
+                                                type: "string",
+                                            },
+                                        },
+                                        clinics: {
+                                            type: "array",
+                                            items: {
+                                                type: "string",
+                                            },
+                                        },
+                                        createdAt: { type: "string" },
+                                        updatedAt: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "400": {
+                        description: "Bad Request",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 400,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/procedures": {
             get: {
                 tags: ["Procedure"],
@@ -1018,6 +1116,39 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/users": {
+            get: {
+                tags: ["Users"],
+                summary: "Get all users",
+                security: [{ bearerAuth: [] }],
+                responses: {
+                    "200": {
+                        description: "Successfully get all users",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "array",
+                                    items: {
+                                        type: "object",
+                                        properties: {
+                                            isActive: { type: "boolean" },
+                                            _id: { type: "string" },
+                                            name: { type: "string" },
+                                            email: { type: "string" },
+                                            surname: { type: "string" },
+                                            role: { type: "string" },
+                                            isVerified: { type: "boolean" },
+                                            createdAt: { type: "string" },
+                                            updatedAt: { type: "string" },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/users/{id}": {
             get: {
                 tags: ["Users"],
@@ -1043,14 +1174,28 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         role: { type: "string" },
                                         name: { type: "string" },
                                         surname: { type: "string" },
-                                        age: { type: "integer" },
-                                        avatar: { type: "string" },
                                         isActive: { type: "boolean" },
-                                        isDeleted: { type: "boolean" },
                                         isVerified: { type: "boolean" },
                                         _id: { type: "string" },
                                         createdAt: { type: "string" },
                                         updatedAt: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
                                     },
                                 },
                             },
