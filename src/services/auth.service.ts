@@ -28,7 +28,7 @@ class AuthService {
         });
         await tokenRepository.create({ ...tokens, _userId: newUser._id });
 
-        if (config.ENV !== "test") {
+        if (config.ENV === "test") {
             const token = tokenService.generateActionToken(
                 {
                     userId: newUser._id,

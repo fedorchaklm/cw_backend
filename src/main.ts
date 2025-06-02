@@ -4,8 +4,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Server } from "http";
 import mongoose from "mongoose";
+import swaggerUI from "swagger-ui-express";
 
 import { config } from "./configs/config";
+import { swaggerDocument } from "./configs/swagger.config";
 import { ApiError } from "./errors/api.error";
 import { apiRouter } from "./routers/api.router";
 
@@ -14,6 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use("/", apiRouter);
 
 app.use(
