@@ -47,22 +47,6 @@ class UserService {
     //     return updatedUser;
     // };
 
-    public blockUser = async (id: string): Promise<IUser | null> => {
-        const user = await userRepository.getById(id);
-        if (user === null) {
-            throw new ApiError("User not found", StatusCodesEnum.NOT_FOUND);
-        }
-        return await userRepository.blockUser(id);
-    };
-
-    public unblockUser = async (id: string): Promise<IUser | null> => {
-        const user = await userRepository.getById(id);
-        if (user === null) {
-            throw new ApiError("User not found", StatusCodesEnum.NOT_FOUND);
-        }
-        return await userRepository.unblockUser(id);
-    };
-
     public deleteById = async (id: string): Promise<IUser | null> => {
         const user = await userRepository.getById(id);
         if (user === null) {

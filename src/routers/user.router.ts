@@ -1,7 +1,6 @@
 import { Router } from "express";
 
 import { userController } from "../controllers/user.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
 import { UserValidator } from "../validators/user.validator";
 
@@ -21,21 +20,6 @@ router.put(
     commonMiddleware.isValidate("id"),
     commonMiddleware.validateBody(UserValidator.update),
     userController.updateById,
-);
-router.patch(
-    "/:id/block",
-    commonMiddleware.isValidate("id"),
-    authMiddleware.checkAccessToken,
-    authMiddleware.isAdmin,
-    userController.blockUser,
-);
-
-router.patch(
-    "/:id/unblock",
-    commonMiddleware.isValidate("id"),
-    authMiddleware.checkAccessToken,
-    authMiddleware.isAdmin,
-    userController.unBlockUser,
 );
 router.delete(
     "/:id",
