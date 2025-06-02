@@ -200,6 +200,76 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/auth/activate/{token}": {
+            patch: {
+                tags: ["Auth"],
+                summary: "Activate account",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "token",
+                        in: "path",
+                        description: "token",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Get refresh tokens successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        user: {
+                                            type: "object",
+                                            properties: {
+                                                email: { type: "string" },
+                                                role: { type: "string" },
+                                                name: { type: "string" },
+                                                surname: { type: "string" },
+                                                isActive: { type: "boolean" },
+                                                isDeleted: { type: "boolean" },
+                                                isVerified: { type: "boolean" },
+                                                _id: { type: "string" },
+                                                createdAt: { type: "string" },
+                                                updatedAt: { type: "string" },
+                                            },
+                                        },
+                                        tokens: {
+                                            type: "object",
+                                            properties: {
+                                                accessToken: { type: "string" },
+                                                refreshToken: {
+                                                    type: "string",
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "401": {
+                        description: "Unauthorized",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 401,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/auth/me": {
             get: {
                 tags: ["Auth"],
@@ -307,6 +377,143 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         status: {
                                             type: "string",
                                             default: 400,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/auth/recovery": {
+            post: {
+                tags: ["Auth"],
+                summary: "Recovery request",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    email: { type: "string", format: "email" },
+                                },
+                                required: ["email"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Made recovery request successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        details: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "401": {
+                        description: "Unauthorized",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 401,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/auth/recovery/{token}": {
+            post: {
+                tags: ["Auth"],
+                summary: "Recovery password",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "token",
+                        in: "path",
+                        description: "token",
+                        schema: { type: "string" },
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    password: { type: "string" },
+                                },
+                                required: ["password"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Get refresh tokens successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        user: {
+                                            type: "object",
+                                            properties: {
+                                                email: { type: "string" },
+                                                role: { type: "string" },
+                                                name: { type: "string" },
+                                                surname: { type: "string" },
+                                                isActive: { type: "boolean" },
+                                                isDeleted: { type: "boolean" },
+                                                isVerified: { type: "boolean" },
+                                                _id: { type: "string" },
+                                                createdAt: { type: "string" },
+                                                updatedAt: { type: "string" },
+                                            },
+                                        },
+                                        tokens: {
+                                            type: "object",
+                                            properties: {
+                                                accessToken: { type: "string" },
+                                                refreshToken: {
+                                                    type: "string",
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "401": {
+                        description: "Unauthorized",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 401,
                                         },
                                         message: { type: "string" },
                                     },

@@ -35,6 +35,7 @@ describe("POST /clinics", () => {
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
         await request(app).post("/auth/sign-up").send(user);
+        // await request(app).patch(`/users/${createdUser.body._id}/unblock`);
         const loginRes = await request(app).post("/auth/sign-in").send({
             email: user.email,
             password: user.password,

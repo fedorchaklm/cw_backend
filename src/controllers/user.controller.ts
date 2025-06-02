@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { StatusCodesEnum } from "../enums/status-codes.enum";
+import { ApiError } from "../errors/api.error";
 import { IUser } from "../interfaces/user.interface";
 import { userService } from "../services/user.service";
 
@@ -53,6 +54,42 @@ class UserController {
         try {
             const { id } = req.params;
             const user = await userService.updateById(id, req.body);
+            res.status(StatusCodesEnum.OK).json(user);
+        } catch (e) {
+            next(e);
+        }
+    };
+
+    public blockUser = async (
+        req: Request,
+        res: Response<IUser | null>,
+        next: NextFunction,
+    ) => {
+        try {
+            const { id: userId } = req.params;
+            const { userId: myId } = res.locals.tokenPayload;
+            if (userId === myId) {
+                throw new ApiError("Not permitted", StatusCodesEnum.FORBIDDEN);
+            }
+            const user = await userService.blockUser(userId);
+            res.status(StatusCodesEnum.OK).json(user);
+        } catch (e) {
+            next(e);
+        }
+    };
+
+    public unBlockUser = async (
+        req: Request,
+        res: Response<IUser | null>,
+        next: NextFunction,
+    ) => {
+        try {
+            const { id: userId } = req.params;
+            const { userId: myId } = res.locals.tokenPayload;
+            if (userId === myId) {
+                throw new ApiError("Not permitted", StatusCodesEnum.FORBIDDEN);
+            }
+            const user = await userService.unblockUser(userId);
             res.status(StatusCodesEnum.OK).json(user);
         } catch (e) {
             next(e);
