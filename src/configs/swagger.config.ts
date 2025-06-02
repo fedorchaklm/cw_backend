@@ -261,6 +261,62 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/auth/refresh": {
+            post: {
+                tags: ["Auth"],
+                summary: "Refresh tokens",
+                security: [{ bearerAuth: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    refreshToken: { type: "string" },
+                                },
+                                required: ["refreshToken"],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Get refresh tokens successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        accessToken: { type: "string" },
+                                        refreshToken: {
+                                            type: "string",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "401": {
+                        description: "Unauthorized",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 400,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/clinics": {
             get: {
                 tags: ["Clinic"],
@@ -1182,7 +1238,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/users": {
             get: {
-                tags: ["Users"],
+                tags: ["User"],
                 summary: "Get all users",
                 security: [{ bearerAuth: [] }],
                 responses: {
@@ -1217,7 +1273,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/users/{id}": {
             get: {
-                tags: ["Users"],
+                tags: ["User"],
                 summary: "Get user by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
