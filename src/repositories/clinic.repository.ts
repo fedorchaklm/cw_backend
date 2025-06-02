@@ -54,8 +54,8 @@ class ClinicRepository {
         ]);
     };
 
-    public getById(id: string): Promise<IClinic> {
-        return Clinic.findById(id);
+    public getById(id: string): Promise<any> {
+        return Clinic.findById(id).populate("doctors").populate("procedures");
     }
 
     public getByName(name: string): Promise<IClinic> {

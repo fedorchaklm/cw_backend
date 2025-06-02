@@ -43,7 +43,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 requestBody: {
                     required: true,
                     content: {
-                        "aplication/json": {
+                        "application/json": {
                             schema: {
                                 type: "object",
                                 properties: {
@@ -69,7 +69,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "201": {
                         description: "User registered successfully",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -104,7 +104,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "400": {
                         description: "Bad Request",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -128,7 +128,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 requestBody: {
                     required: true,
                     content: {
-                        "aplication/json": {
+                        "application/json": {
                             schema: {
                                 type: "object",
                                 properties: {
@@ -147,7 +147,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "200": {
                         description: "User sign in in successfully",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -183,7 +183,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "401": {
                         description: "Unauthorized",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -242,7 +242,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                         description:
                             "List of clinics with pagination and filter",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -345,6 +345,520 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/clinics/{id}": {
+            get: {
+                tags: ["Clinic"],
+                summary: "Get clinic by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Get clinic by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Successfully get clinic",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                        address: { type: "string" },
+                                        phone: {
+                                            type: "string",
+                                        },
+                                        email: {
+                                            type: "string",
+                                        },
+                                        procedures: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: {
+                                                        type: "string",
+                                                    },
+                                                    name: {
+                                                        type: "string",
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        doctors: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: {
+                                                        type: "string",
+                                                    },
+                                                    name: {
+                                                        type: "string",
+                                                    },
+                                                    surname: {
+                                                        type: "string",
+                                                    },
+                                                    age: {
+                                                        type: "number",
+                                                    },
+                                                    phone: {
+                                                        type: "string",
+                                                    },
+                                                    email: {
+                                                        type: "string",
+                                                    },
+                                                    experience: {
+                                                        type: "number",
+                                                    },
+                                                    clinics: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "string",
+                                                        },
+                                                    },
+                                                    doctors: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "string",
+                                                        },
+                                                    },
+                                                    createdAt: {
+                                                        type: "string",
+                                                    },
+                                                    updatedAt: {
+                                                        type: "string",
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        description: {
+                                            type: "string",
+                                        },
+                                        createdAt: {
+                                            type: "string",
+                                        },
+                                        updatedAt: {
+                                            type: "string",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/clinics/post": {
+            post: {
+                tags: ["Clinic"],
+                summary: "Create clinic",
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    address: { type: "string" },
+                                    phone: {
+                                        type: "string",
+                                    },
+                                    email: {
+                                        type: "string",
+                                    },
+                                    description: {
+                                        type: "string",
+                                    },
+                                },
+                                required: [
+                                    "name",
+                                    "address",
+                                    "phone",
+                                    "email",
+                                    "description",
+                                ],
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Create clinic successfully",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                        address: { type: "string" },
+                                        phone: {
+                                            type: "string",
+                                        },
+                                        email: {
+                                            type: "string",
+                                        },
+                                        procedures: {
+                                            type: "array",
+                                            items: { type: "string" },
+                                        },
+                                        doctors: {
+                                            type: "array",
+                                            items: { type: "string" },
+                                        },
+                                        description: {
+                                            type: "string",
+                                        },
+                                        createdAt: {
+                                            type: "string",
+                                        },
+                                        updatedAt: {
+                                            type: "string",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "400": {
+                        description: "Bad Request",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 400,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/doctors": {
+            get: {
+                tags: ["Doctor"],
+                summary: "Get doctors with pagination and filter",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "pageSize",
+                        in: "query",
+                        description: "number of size per page",
+                        schema: { type: "integer", default: 10 },
+                    },
+                    {
+                        name: "page",
+                        in: "query",
+                        description: "page number",
+                        schema: { type: "integer", default: 1 },
+                    },
+                    {
+                        name: "name",
+                        in: "query",
+                        description: "doctor name",
+                        schema: { type: "string" },
+                    },
+                    {
+                        name: "surname",
+                        in: "query",
+                        description: "doctor surname",
+                        schema: { type: "string" },
+                    },
+                    {
+                        name: "phone",
+                        in: "query",
+                        description: "doctor phone",
+                        schema: { type: "string" },
+                    },
+                    {
+                        name: "email",
+                        in: "query",
+                        description: "doctor email",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description:
+                            "List of doctors with pagination and filter",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        totalItems: { type: "integer" },
+                                        totalPages: { type: "integer" },
+                                        prevPage: { type: "boolean" },
+                                        nextPage: { type: "boolean" },
+                                        data: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: {
+                                                        type: "string",
+                                                    },
+                                                    name: {
+                                                        type: "string",
+                                                    },
+                                                    surname: {
+                                                        type: "string",
+                                                    },
+                                                    age: {
+                                                        type: "number",
+                                                    },
+                                                    phone: {
+                                                        type: "string",
+                                                    },
+                                                    email: {
+                                                        type: "string",
+                                                    },
+                                                    experience: {
+                                                        type: "number",
+                                                    },
+                                                    clinics: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "array",
+                                                            items: {
+                                                                type: "object",
+                                                                properties: {
+                                                                    _id: {
+                                                                        type: "string",
+                                                                    },
+                                                                    name: {
+                                                                        type: "string",
+                                                                    },
+                                                                    address: {
+                                                                        type: "string",
+                                                                    },
+                                                                    phone: {
+                                                                        type: "string",
+                                                                    },
+                                                                    email: {
+                                                                        type: "string",
+                                                                    },
+                                                                    procedures:
+                                                                        {
+                                                                            type: "array",
+                                                                            items: {
+                                                                                type: "string",
+                                                                            },
+                                                                        },
+                                                                    doctors: {
+                                                                        type: "array",
+                                                                        items: {
+                                                                            type: "string",
+                                                                        },
+                                                                    },
+                                                                    description:
+                                                                        {
+                                                                            type: "string",
+                                                                        },
+                                                                    createdAt: {
+                                                                        type: "string",
+                                                                    },
+                                                                    updatedAt: {
+                                                                        type: "string",
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    procedures: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "object",
+                                                            properties: {
+                                                                _id: {
+                                                                    type: "string",
+                                                                },
+                                                                name: {
+                                                                    type: "string",
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    createdAt: {
+                                                        type: "string",
+                                                    },
+                                                    updatedAt: {
+                                                        type: "string",
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/doctors/{id}": {
+            get: {
+                tags: ["Doctor"],
+                summary: "Get doctor by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Get doctor by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Successfully get doctor",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: {
+                                            type: "string",
+                                        },
+                                        name: {
+                                            type: "string",
+                                        },
+                                        surname: {
+                                            type: "string",
+                                        },
+                                        age: {
+                                            type: "number",
+                                        },
+                                        phone: {
+                                            type: "string",
+                                        },
+                                        email: {
+                                            type: "string",
+                                        },
+                                        experience: {
+                                            type: "number",
+                                        },
+                                        clinics: {
+                                            type: "array",
+                                            items: {
+                                                type: "array",
+                                                items: {
+                                                    type: "object",
+                                                    properties: {
+                                                        _id: {
+                                                            type: "string",
+                                                        },
+                                                        name: {
+                                                            type: "string",
+                                                        },
+                                                        address: {
+                                                            type: "string",
+                                                        },
+                                                        phone: {
+                                                            type: "string",
+                                                        },
+                                                        email: {
+                                                            type: "string",
+                                                        },
+                                                        procedures: {
+                                                            type: "array",
+                                                            items: {
+                                                                type: "string",
+                                                            },
+                                                        },
+                                                        doctors: {
+                                                            type: "array",
+                                                            items: {
+                                                                type: "string",
+                                                            },
+                                                        },
+                                                        description: {
+                                                            type: "string",
+                                                        },
+                                                        createdAt: {
+                                                            type: "string",
+                                                        },
+                                                        updatedAt: {
+                                                            type: "string",
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        procedures: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: {
+                                                        type: "string",
+                                                    },
+                                                    name: {
+                                                        type: "string",
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        createdAt: {
+                                            type: "string",
+                                        },
+                                        updatedAt: {
+                                            type: "string",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/procedures": {
             get: {
                 tags: ["Procedure"],
@@ -375,7 +889,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                         description:
                             "List of procedures with pagination and filter",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -404,7 +918,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         "/procedures/{id}": {
             get: {
                 tags: ["Procedure"],
-                summary: "Get procedures with pagination and filter",
+                summary: "Get procedure by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
                     {
@@ -418,7 +932,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "200": {
                         description: "Successfully get procedure",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -434,7 +948,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "404": {
                         description: "Not found",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -458,7 +972,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 requestBody: {
                     required: true,
                     content: {
-                        "aplication/json": {
+                        "application/json": {
                             schema: {
                                 type: "object",
                                 properties: {
@@ -473,7 +987,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "200": {
                         description: "Create procedure successfully",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -487,7 +1001,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "400": {
                         description: "Bad Request",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
@@ -521,7 +1035,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     "200": {
                         description: "Successfully get user",
                         content: {
-                            "aplication/json": {
+                            "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
