@@ -84,10 +84,22 @@ describe("GET /procedures", () => {
         await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedure);
         await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedureMain);
         const res = await request(app).get("/procedures").set("Authorization", `Bearer ${token}`);
-        console.log(res.body.data);
         expect(res.statusCode).toEqual(200);
         expect(res.body.data.length).toBe(2);
         expect(res.body.data[0]).toHaveProperty("name");
+    });
+
+    it("should return all procedures such have word some ", async () => {
+        await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedure);
+        await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedureMain);
+        const res = await request(app).get("/procedures?name=some").set("Authorization", `Bearer ${token}`);
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.data).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                _id: expect.any(String),
+                name: procedure.name,
+            })
+        ]));
     });
 });
 

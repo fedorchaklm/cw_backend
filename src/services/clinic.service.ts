@@ -47,7 +47,6 @@ class ClinicService {
         clinic: Partial<IClinic>,
     ): Promise<IClinic> {
         const existsClinic = await clinicRepository.getById(clinicId);
-        console.log({ existsClinic });
         if (existsClinic === null) {
             throw new ApiError(
                 `Clinic with such id ${clinicId} not found!`,
@@ -75,16 +74,13 @@ class ClinicService {
         const clinicIds = [];
         for (const name of clinicNames) {
             const clinic = await this.getByName(name);
-            console.log({ clinic });
             if (!clinic) {
-                console.log(">", "no clinic found");
                 throw new ApiError(
                     `Clinic '${name}' was not found`,
                     StatusCodesEnum.NOT_FOUND,
                 );
             }
             clinicIds.push(clinic._id);
-            console.log({ clinicIds });
         }
         return clinicIds;
     }

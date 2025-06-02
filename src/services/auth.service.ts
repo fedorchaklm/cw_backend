@@ -27,21 +27,24 @@ class AuthService {
             role: newUser.role as RoleEnum,
         });
         await tokenRepository.create({ ...tokens, _userId: newUser._id });
-        const token = tokenService.generateActionToken(
-            {
-                userId: newUser._id,
-                role: newUser.role as RoleEnum,
-            },
-            ActionTokenTypeEnum.ACTIVATE,
-        );
-        await emailService.sendEmail(
-            newUser.email,
-            emailConstants[EmailEnum.ACTIVATE],
-            {
-                name: newUser.name,
-                url: `${config.FRONTEND_URL}/activate/${token}`,
-            },
-        );
+
+        if (config.ENV !== "test") {
+            const token = tokenService.generateActionToken(
+                {
+                    userId: newUser._id,
+                    role: newUser.role as RoleEnum,
+                },
+                ActionTokenTypeEnum.ACTIVATE,
+            );
+            await emailService.sendEmail(
+                newUser.email,
+                emailConstants[EmailEnum.ACTIVATE],
+                {
+                    name: newUser.name,
+                    url: `${config.FRONTEND_URL}/activate/${token}`,
+                },
+            );
+        }
         return { user: newUser, tokens };
     };
 

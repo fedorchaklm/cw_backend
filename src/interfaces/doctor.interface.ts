@@ -1,4 +1,4 @@
-import { DoctorQueryOrderEnum } from "../enums/doctor-query-order.enum";
+import { QueryOrderEnum } from "../enums/query-order.enum";
 import { IBase } from "./base.interface";
 
 export interface IDoctor extends IBase {
@@ -21,7 +21,7 @@ export interface IDoctorQuery {
     surname?: string;
     email?: string;
     phone?: string;
-    orderBy?: DoctorQueryOrderEnum;
+    orderBy?: QueryOrderEnum;
 }
 
 export type IDoctorCreateDTO = Omit<IDoctor, "_id" | "isDeleted">;

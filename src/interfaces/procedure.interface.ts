@@ -9,7 +9,7 @@ export interface IProcedureQuery {
     pageSize: number;
     page: number;
     name?: string;
-    orderBy?: string;
+    // orderBy?: string;
 }
 
 export type IProcedureCreateDTO = Omit<IProcedure, "_id">;

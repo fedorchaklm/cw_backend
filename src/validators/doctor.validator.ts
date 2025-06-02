@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-import { DoctorQueryOrderEnum } from "../enums/doctor-query-order.enum";
+import { QueryOrderEnum } from "../enums/query-order.enum";
 import { RegexEnum } from "../enums/regex.enum";
 
 export class DoctorValidator {
@@ -43,8 +43,8 @@ export class DoctorValidator {
         email: Joi.string().trim(),
         phone: Joi.string().trim(),
         order: Joi.string().valid(
-            ...Object.values(DoctorQueryOrderEnum),
-            ...Object.values(DoctorQueryOrderEnum).map((item) => `-${item}`),
+            ...Object.values(QueryOrderEnum),
+            ...Object.values(QueryOrderEnum).map((item) => `-${item}`),
         ),
     });
 }

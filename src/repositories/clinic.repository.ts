@@ -1,35 +1,53 @@
 import { FilterQuery } from "mongoose";
 
+import { QueryOrderEnum } from "../enums/query-order.enum";
 import {
     IClinic,
     IClinicCreateDTO,
     IClinicQuery,
 } from "../interfaces/clinic.interface";
 import { Clinic } from "../models/clinic.model";
+import { Doctor } from "../models/doctor.model";
+import { Procedure } from "../models/procedure.model";
 
 class ClinicRepository {
-    public getAll = (query: IClinicQuery): Promise<[Array<any>, number]> => {
+    public getAll = async (
+        query: IClinicQuery,
+    ): Promise<[Array<any>, number]> => {
         const filterObject: FilterQuery<IClinic> = {};
         const skip = query.pageSize * (query.page - 1);
-
         if (query.name) {
             filterObject.name = { $regex: query.name, $options: "i" };
         }
         if (query.procedures) {
+            // filterObject.procedures = {
+            //     $regex: query.procedures,
+            //     $options: "i",
+            // };
+            const procedures = await Procedure.find({
+                name: { $regex: query.procedures, $options: "i" },
+            }).select("_id");
+
             filterObject.procedures = {
-                $regex: query.procedures,
-                $options: "i",
+                $in: procedures.map((procedure) => procedure._id),
             };
         }
         if (query.doctors) {
-            filterObject.doctors = { $regex: query.doctors, $options: "i" };
+            // filterObject.doctors = { $regex: query.doctors, $options: "i" };
+            const doctors = await Doctor.find({
+                name: { $regex: query.doctors, $options: "i" },
+            }).select("_id");
+
+            filterObject.doctors = {
+                $in: doctors.map((doctor) => doctor._id),
+            };
         }
 
-        return Promise.all([
+        return await Promise.all([
             Clinic.find(filterObject)
                 .limit(query.pageSize)
                 .skip(skip)
-                .sort(query.orderBy)
+                .sort(QueryOrderEnum.NAME)
                 .populate("doctors")
                 .populate("procedures"),
             Clinic.find(filterObject).countDocuments(),

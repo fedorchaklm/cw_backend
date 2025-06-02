@@ -36,8 +36,8 @@ export class ClinicValidator {
         pageSize: Joi.number().min(1).max(100).default(10),
         page: Joi.number().min(1).default(1),
         name: Joi.string().trim(),
-        procedure: Joi.string().trim(),
-        doctor: Joi.string().trim(),
+        procedures: Joi.string().trim(),
+        doctors: Joi.string().trim(),
         order: Joi.string().valid(
             ...Object.values(ProcedureQueryOrderEnum),
             ...Object.values(ProcedureQueryOrderEnum).map((item) => `-${item}`),

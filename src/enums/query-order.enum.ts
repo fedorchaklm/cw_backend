@@ -1,4 +1,4 @@
-export enum DoctorQueryOrderEnum {
+export enum QueryOrderEnum {
     NAME = "name",
     SURNAME = "surname",
 }

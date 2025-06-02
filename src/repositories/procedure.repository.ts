@@ -1,5 +1,6 @@
 import { FilterQuery } from "mongoose";
 
+import { QueryOrderEnum } from "../enums/query-order.enum";
 import {
     IProcedure,
     IProcedureCreateDTO,
@@ -21,7 +22,7 @@ class ProcedureRepository {
             Procedure.find(filterObject)
                 .limit(query.pageSize)
                 .skip(skip)
-                .sort(query.orderBy),
+                .sort(QueryOrderEnum.NAME),
             Procedure.find(filterObject).countDocuments(),
         ]);
     };

@@ -43,9 +43,7 @@ class AuthController {
 
     public refresh = async (_: Request, res: Response, next: NextFunction) => {
         try {
-            console.log("1");
             const { userId, role } = res.locals.tokenPayload;
-            console.log({ userId, role });
             const tokens = tokenService.generateTokens({ userId, role });
             await tokenRepository.create({
                 ...tokens,

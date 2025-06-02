@@ -16,7 +16,6 @@ class AuthMiddleware {
     ) => {
         try {
             const authorizationHeader = req.headers.authorization;
-            console.log("authorizationHeader", authorizationHeader);
             if (!authorizationHeader) {
                 throw new ApiError(
                     "No token provided",
