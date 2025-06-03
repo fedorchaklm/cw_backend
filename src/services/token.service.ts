@@ -45,7 +45,6 @@ class TokenService {
                         StatusCodesEnum.BAD_REQUEST,
                     );
             }
-
             return jwt.verify(token, secret) as ITokenPayload;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {

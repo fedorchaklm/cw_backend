@@ -112,7 +112,6 @@ class AuthService {
             token,
             ActionTokenTypeEnum.RECOVERY,
         );
-
         const hashedPassword = await passwordService.hashPassword(password);
         return await userService.updateById(userId, {
             password: hashedPassword,

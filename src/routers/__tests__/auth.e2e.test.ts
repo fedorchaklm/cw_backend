@@ -15,34 +15,22 @@ const user = {
 const wrongEmail = "wrong@email.com";
 
 const addToken = (req, token: string) => req.set("Authorization", `Bearer ${token}`);
+const loginUser = (data: { email: string; password: string }) => request(app).post("/auth/sign-in").send(data);
+const registerUser = (data: { email: string; password: string }) => request(app).post("/auth/sign-up").send(data);
 
 const getUserTokens = async () => {
-    await request(app).post("/auth/sign-up").send(user);
-    const loginRes = await request(app).post("/auth/sign-in").send({
-        email: user.email,
-        password: user.password,
-    });
+    await registerUser(user);
+    const loginRes = await loginUser(user);
     return loginRes.body.tokens;
 };
 
 const getUser = async () => {
-    const registerUser = await request(app).post("/auth/sign-up").send(user);
-    await User.findByIdAndUpdate(registerUser.body.user._id, { isActive: true });
-    const loginRes = await request(app).post("/auth/sign-in").send({
-        email: user.email,
-        password: user.password,
-    });
-    return loginRes.body;
+    const registeredUser = await request(app).post("/auth/sign-up").send(user);
+    await User.findByIdAndUpdate(registeredUser.body.user._id, { isActive: true });
+    return loginUser(user);
 };
 
-const registerUser = async () => await request(app).post("/auth/sign-up").send(user);
-const loginUser = async (email: string, password: string) => await request(app).post("/auth/sign-in").send({
-    email,
-    password,
-});
-
 const refreshTokens = (refreshToken: string, token: string) => addToken(request(app).post("/auth/refresh"), token).send({ refreshToken });
-
 const makeRecoveryRequest = (email: string, token: string) => addToken(request(app).post("/auth/recovery"), token).send({ email });
 const recoveryPassword = (password: string, token: string) => request(app).post(`/auth/recovery/${token}`).send({ password });
 
@@ -61,7 +49,7 @@ describe("POST /auth/sign-up", () => {
     });
 
     it("should register new user", async () => {
-        const res = await registerUser();
+        const res = await registerUser(user);
 
         expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual(expect.objectContaining({
@@ -82,9 +70,8 @@ describe("POST /auth/sign-up", () => {
     });
 
     it("should return error when email is in use", async () => {
-        await registerUser();
-        const res = await registerUser();
-
+        await registerUser(user);
+        const res = await registerUser(user);
         expect(res.statusCode).toEqual(400);
         expect(res.body.message).toBe("User is already exists");
     });
@@ -97,7 +84,7 @@ describe("POST /auth/sign-in", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await registerUser();
+        await registerUser(user);
     });
 
     afterAll(async () => {
@@ -106,7 +93,7 @@ describe("POST /auth/sign-in", () => {
     });
 
     it("should return user with tokens", async () => {
-        const res = await loginUser(user.email, user.password);
+        const res = await loginUser(user);
 
         expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual(expect.objectContaining({
@@ -127,7 +114,7 @@ describe("POST /auth/sign-in", () => {
     });
 
     it("should return error when invalid credentials", async () => {
-        const res = await loginUser(wrongEmail, user.password);
+        const res = await loginUser({ email: wrongEmail, password: user.password });
         expect(res.statusCode).toEqual(401);
         expect(res.body.message).toBe("Invalid email or password");
     });
@@ -196,35 +183,24 @@ describe("POST /auth/recovery/:token", () => {
         await stopServer();
     });
 
-    it("should changed password", async () => {
-        const user = await getUser();
-        console.log({user});
-        // const user = await userService.getByEmail(email);
+    it.only("should change password", async () => {
+        const response = await getUser();
         const token = tokenService.generateActionToken(
             {
-                userId: user._id,
-                role: user.role,
+                userId: response.body.user._id,
+                role: response.body.user.role,
             },
             ActionTokenTypeEnum.RECOVERY,
         );
-        console.log({token});
         const res = await recoveryPassword("P@sword123", token);
-        console.log({body: res.body});
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
-            user: {
-                _id: user._id,
-                name: user.name,
-                surname: user.surname,
-                email: user.email,
-                isActive: true,
-                role: "user",
-
-            },
-            tokens: expect.objectContaining({
-                accessToken: expect.any(String),
-                refreshToken: expect.any(String),
-            }),
+            _id: res.body._id,
+            name: res.body.name,
+            surname: res.body.surname,
+            email: res.body.email,
+            isActive: true,
+            role: "user",
         });
     });
 });

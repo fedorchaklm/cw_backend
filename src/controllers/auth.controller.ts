@@ -98,9 +98,10 @@ class AuthController {
         try {
             const { token } = req.params;
             const { password } = req.body;
-            const user = authService.recoveryPassword(token, password);
+            const user = await authService.recoveryPassword(token, password);
             res.status(StatusCodesEnum.OK).json(user);
         } catch (e) {
+            console.log(">", e);
             next(e);
         }
     };
