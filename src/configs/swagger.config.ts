@@ -283,29 +283,12 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        user: {
-                                            type: "object",
-                                            properties: {
-                                                _id: { type: "string" },
-                                                name: { type: "string" },
-                                                surname: { type: "string" },
-                                                email: { type: "string" },
-                                                role: { type: "string" },
-                                                isActive: { type: "boolean" },
-                                                isVerified: { type: "boolean" },
-                                                createdAt: { type: "string" },
-                                                updatedAt: { type: "string" },
-                                            },
-                                        },
-                                        tokens: {
-                                            type: "object",
-                                            properties: {
-                                                accessToken: { type: "string" },
-                                                refreshToken: {
-                                                    type: "string",
-                                                },
-                                            },
-                                        },
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                        surname: { type: "string" },
+                                        email: { type: "string" },
+                                        role: { type: "string" },
+                                        isActive: { type: "boolean" },
                                     },
                                 },
                             },
@@ -475,30 +458,16 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        user: {
-                                            type: "object",
-                                            properties: {
-                                                email: { type: "string" },
-                                                role: { type: "string" },
-                                                name: { type: "string" },
-                                                surname: { type: "string" },
-                                                isActive: { type: "boolean" },
-                                                isDeleted: { type: "boolean" },
-                                                isVerified: { type: "boolean" },
-                                                _id: { type: "string" },
-                                                createdAt: { type: "string" },
-                                                updatedAt: { type: "string" },
-                                            },
-                                        },
-                                        tokens: {
-                                            type: "object",
-                                            properties: {
-                                                accessToken: { type: "string" },
-                                                refreshToken: {
-                                                    type: "string",
-                                                },
-                                            },
-                                        },
+                                        email: { type: "string" },
+                                        role: { type: "string" },
+                                        name: { type: "string" },
+                                        surname: { type: "string" },
+                                        isActive: { type: "boolean" },
+                                        isDeleted: { type: "boolean" },
+                                        isVerified: { type: "boolean" },
+                                        _id: { type: "string" },
+                                        createdAt: { type: "string" },
+                                        updatedAt: { type: "string" },
                                     },
                                 },
                             },

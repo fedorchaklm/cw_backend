@@ -15,8 +15,8 @@ const user = {
 const wrongEmail = "wrong@email.com";
 
 const addToken = (req, token: string) => req.set("Authorization", `Bearer ${token}`);
-const loginUser = (data: { email: string; password: string }) => request(app).post("/auth/sign-in").send(data);
 const registerUser = (data: { email: string; password: string }) => request(app).post("/auth/sign-up").send(data);
+const loginUser = (data: { email: string; password: string }) => request(app).post("/auth/sign-in").send(data);
 
 const getUserTokens = async () => {
     await registerUser(user);
@@ -33,6 +33,7 @@ const getUser = async () => {
 const refreshTokens = (refreshToken: string, token: string) => addToken(request(app).post("/auth/refresh"), token).send({ refreshToken });
 const makeRecoveryRequest = (email: string, token: string) => addToken(request(app).post("/auth/recovery"), token).send({ email });
 const recoveryPassword = (password: string, token: string) => request(app).post(`/auth/recovery/${token}`).send({ password });
+const me = (token: string) => addToken(request(app).get("/auth/me"), token);
 
 describe("POST /auth/sign-up", () => {
     beforeAll(async () => {
@@ -183,7 +184,7 @@ describe("POST /auth/recovery/:token", () => {
         await stopServer();
     });
 
-    it.only("should change password", async () => {
+    it("should change password", async () => {
         const response = await getUser();
         const token = tokenService.generateActionToken(
             {
@@ -201,6 +202,38 @@ describe("POST /auth/recovery/:token", () => {
             email: res.body.email,
             isActive: true,
             role: "user",
+        });
+    });
+});
+
+describe("GET /auth/me", () => {
+    beforeAll(async () => {
+        await startServer();
+    });
+
+    beforeEach(async () => {
+        await mongoose.connection.dropDatabase();
+    });
+
+    afterAll(async () => {
+        await mongoose.connection.dropDatabase();
+        await stopServer();
+    });
+
+    it("should return user with tokens", async () => {
+        await getUser();
+        const data = await loginUser(user);
+        const res = await me(data.body.tokens.accessToken);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual({
+            _id: res.body._id,
+            name: res.body.name,
+            surname: res.body.surname,
+            email: res.body.email,
+            isActive: true,
+            role: "user",
+
         });
     });
 });
