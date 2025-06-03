@@ -14,7 +14,19 @@ const clinicSchema = new Schema(
         // description: { type: String, required: true },
         doctors: [{ type: Schema.Types.ObjectId, required: true, ref: Doctor }],
     },
-    { timestamps: true, versionKey: false },
+    {
+        timestamps: true,
+        versionKey: false,
+        toJSON: {
+            transform: (doc, ret) => {
+                delete ret.password;
+                delete ret.isDeleted;
+                delete ret.createdAt;
+                delete ret.updatedAt;
+                return ret;
+            },
+        },
+    },
 );
 
 export const Clinic = mongoose.model("clinic", clinicSchema);

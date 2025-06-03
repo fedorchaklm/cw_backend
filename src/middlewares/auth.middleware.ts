@@ -24,7 +24,6 @@ class AuthMiddleware {
             }
 
             const accessToken = authorizationHeader.split(" ")[1];
-
             if (!accessToken) {
                 throw new ApiError(
                     "No token provided",
@@ -98,8 +97,8 @@ class AuthMiddleware {
                 TokenTypeEnum.REFRESH,
             );
 
-            // req.res.locals.tokenPayload = tokenPayload;
-            res.locals.tokenPayload = tokenPayload;
+            req.res.locals.tokenPayload = tokenPayload;
+            // res.locals.tokenPayload = tokenPayload;
 
             next();
         } catch (e) {

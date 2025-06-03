@@ -27,6 +27,8 @@ const UserSchema = new Schema(
             transform: (doc, ret) => {
                 delete ret.password;
                 delete ret.isDeleted;
+                delete ret.createdAt;
+                delete ret.updatedAt;
                 return ret;
             },
         },

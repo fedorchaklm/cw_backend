@@ -1,6 +1,5 @@
 import Joi from "joi";
 
-import { ProcedureQueryOrderEnum } from "../enums/procedure-query-order.enum";
 import { RegexEnum } from "../enums/regex.enum";
 
 export class ProcedureValidator {
@@ -18,9 +17,9 @@ export class ProcedureValidator {
         pageSize: Joi.number().min(1).max(100).default(10),
         page: Joi.number().min(1).default(1),
         name: Joi.string().trim(),
-        order: Joi.string().valid(
-            ...Object.values(ProcedureQueryOrderEnum),
-            ...Object.values(ProcedureQueryOrderEnum).map((item) => `-${item}`),
-        ),
+        // order: Joi.string().valid(
+        //     ...Object.values(QueryOrderEnum),
+        //     ...Object.values(QueryOrderEnum).map((item) => `-${item}`),
+        // ),
     });
 }

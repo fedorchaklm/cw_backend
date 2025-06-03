@@ -16,6 +16,7 @@ router.get(
 router.post(
     "/",
     authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     commonMiddleware.validateBody(ProcedureValidator.create),
     procedureController.create,
 );
@@ -28,12 +29,16 @@ router.get(
 router.patch(
     "/:id",
     commonMiddleware.isValidate("id"),
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     commonMiddleware.validateBody(ProcedureValidator.update),
     procedureController.updateById,
 );
 router.delete(
     "/:id",
     commonMiddleware.isValidate("id"),
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     procedureController.deleteById,
 );
 

@@ -25,6 +25,7 @@ const doctorSchema = new Schema(
             transform: (doc, ret) => {
                 delete ret.createdAt;
                 delete ret.updatedAt;
+                return ret;
             },
         },
     },
