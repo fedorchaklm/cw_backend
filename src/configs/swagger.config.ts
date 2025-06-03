@@ -76,15 +76,12 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         user: {
                                             type: "object",
                                             properties: {
-                                                email: { type: "string" },
-                                                role: { type: "string" },
+                                                _id: { type: "string" },
                                                 name: { type: "string" },
                                                 surname: { type: "string" },
+                                                email: { type: "string" },
+                                                role: { type: "string" },
                                                 isActive: { type: "boolean" },
-                                                isVerified: { type: "boolean" },
-                                                _id: { type: "string" },
-                                                createdAt: { type: "string" },
-                                                updatedAt: { type: "string" },
                                             },
                                         },
                                         tokens: {
@@ -154,16 +151,12 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         user: {
                                             type: "object",
                                             properties: {
-                                                email: { type: "string" },
-                                                role: { type: "string" },
+                                                _id: { type: "string" },
                                                 name: { type: "string" },
                                                 surname: { type: "string" },
+                                                email: { type: "string" },
+                                                role: { type: "string" },
                                                 isActive: { type: "boolean" },
-                                                isDeleted: { type: "boolean" },
-                                                isVerified: { type: "boolean" },
-                                                _id: { type: "string" },
-                                                createdAt: { type: "string" },
-                                                updatedAt: { type: "string" },
                                             },
                                         },
                                         tokens: {
@@ -436,16 +429,12 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        email: { type: "string" },
-                                        role: { type: "string" },
+                                        _id: { type: "string" },
                                         name: { type: "string" },
                                         surname: { type: "string" },
+                                        email: { type: "string" },
+                                        role: { type: "string" },
                                         isActive: { type: "boolean" },
-                                        isDeleted: { type: "boolean" },
-                                        isVerified: { type: "boolean" },
-                                        _id: { type: "string" },
-                                        createdAt: { type: "string" },
-                                        updatedAt: { type: "string" },
                                     },
                                 },
                             },
@@ -519,8 +508,14 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                     properties: {
                                         totalItems: { type: "integer" },
                                         totalPages: { type: "integer" },
-                                        prevPage: { type: "boolean" },
-                                        nextPage: { type: "boolean" },
+                                        prevPage: {
+                                            type: "boolean",
+                                            default: false,
+                                        },
+                                        nextPage: {
+                                            type: "boolean",
+                                            default: false,
+                                        },
                                         data: {
                                             type: "array",
                                             items: {
@@ -528,27 +523,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                                 properties: {
                                                     _id: { type: "string" },
                                                     name: { type: "string" },
-                                                    address: { type: "string" },
-                                                    phone: {
-                                                        type: "string",
-                                                    },
-                                                    email: {
-                                                        type: "string",
-                                                    },
-                                                    procedures: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "object",
-                                                            properties: {
-                                                                _id: {
-                                                                    type: "string",
-                                                                },
-                                                                name: {
-                                                                    type: "string",
-                                                                },
-                                                            },
-                                                        },
-                                                    },
                                                     doctors: {
                                                         type: "array",
                                                         items: {
@@ -557,53 +531,35 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                                                 _id: {
                                                                     type: "string",
                                                                 },
-                                                                name: {
+                                                                firstName: {
                                                                     type: "string",
                                                                 },
-                                                                surname: {
-                                                                    type: "string",
-                                                                },
-                                                                age: {
-                                                                    type: "number",
-                                                                },
-                                                                phone: {
+                                                                lastName: {
                                                                     type: "string",
                                                                 },
                                                                 email: {
                                                                     type: "string",
                                                                 },
-                                                                experience: {
-                                                                    type: "number",
-                                                                },
-                                                                clinics: {
-                                                                    type: "array",
-                                                                    items: {
-                                                                        type: "string",
-                                                                    },
-                                                                },
-                                                                doctors: {
-                                                                    type: "array",
-                                                                    items: {
-                                                                        type: "string",
-                                                                    },
-                                                                },
-                                                                createdAt: {
+                                                                phone: {
                                                                     type: "string",
                                                                 },
-                                                                updatedAt: {
-                                                                    type: "string",
+                                                                procedures: {
+                                                                    type: "array",
+                                                                    items: {
+                                                                        type: "object",
+                                                                        properties:
+                                                                            {
+                                                                                _id: {
+                                                                                    type: "string",
+                                                                                },
+                                                                                name: {
+                                                                                    type: "string",
+                                                                                },
+                                                                            },
+                                                                    },
                                                                 },
                                                             },
                                                         },
-                                                    },
-                                                    description: {
-                                                        type: "string",
-                                                    },
-                                                    createdAt: {
-                                                        type: "string",
-                                                    },
-                                                    updatedAt: {
-                                                        type: "string",
                                                     },
                                                 },
                                             },
@@ -637,84 +593,63 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        _id: { type: "string" },
-                                        name: { type: "string" },
-                                        address: { type: "string" },
-                                        phone: {
-                                            type: "string",
+                                        totalItems: { type: "integer" },
+                                        totalPages: { type: "integer" },
+                                        prevPage: {
+                                            type: "boolean",
+                                            default: false,
                                         },
-                                        email: {
-                                            type: "string",
+                                        nextPage: {
+                                            type: "boolean",
+                                            default: false,
                                         },
-                                        procedures: {
+                                        data: {
                                             type: "array",
                                             items: {
                                                 type: "object",
                                                 properties: {
-                                                    _id: {
-                                                        type: "string",
-                                                    },
-                                                    name: {
-                                                        type: "string",
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        doctors: {
-                                            type: "array",
-                                            items: {
-                                                type: "object",
-                                                properties: {
-                                                    _id: {
-                                                        type: "string",
-                                                    },
-                                                    name: {
-                                                        type: "string",
-                                                    },
-                                                    surname: {
-                                                        type: "string",
-                                                    },
-                                                    age: {
-                                                        type: "number",
-                                                    },
-                                                    phone: {
-                                                        type: "string",
-                                                    },
-                                                    email: {
-                                                        type: "string",
-                                                    },
-                                                    experience: {
-                                                        type: "number",
-                                                    },
-                                                    clinics: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "string",
-                                                        },
-                                                    },
+                                                    _id: { type: "string" },
+                                                    name: { type: "string" },
                                                     doctors: {
                                                         type: "array",
                                                         items: {
-                                                            type: "string",
+                                                            type: "object",
+                                                            properties: {
+                                                                _id: {
+                                                                    type: "string",
+                                                                },
+                                                                firstName: {
+                                                                    type: "string",
+                                                                },
+                                                                lastName: {
+                                                                    type: "string",
+                                                                },
+                                                                email: {
+                                                                    type: "string",
+                                                                },
+                                                                phone: {
+                                                                    type: "string",
+                                                                },
+                                                                procedures: {
+                                                                    type: "array",
+                                                                    items: {
+                                                                        type: "object",
+                                                                        properties:
+                                                                            {
+                                                                                _id: {
+                                                                                    type: "string",
+                                                                                },
+                                                                                name: {
+                                                                                    type: "string",
+                                                                                },
+                                                                            },
+                                                                    },
+                                                                },
+                                                            },
                                                         },
-                                                    },
-                                                    createdAt: {
-                                                        type: "string",
-                                                    },
-                                                    updatedAt: {
-                                                        type: "string",
                                                     },
                                                 },
                                             },
-                                        },
-                                        description: {
-                                            type: "string",
-                                        },
-                                        createdAt: {
-                                            type: "string",
-                                        },
-                                        updatedAt: {
-                                            type: "string",
                                         },
                                     },
                                 },
@@ -753,25 +688,14 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 type: "object",
                                 properties: {
                                     name: { type: "string" },
-                                    address: { type: "string" },
-                                    phone: {
-                                        type: "string",
-                                    },
-                                    email: {
-                                        type: "string",
-                                        format: "email",
-                                    },
-                                    description: {
-                                        type: "string",
+                                    doctors: {
+                                        type: "array",
+                                        items: {
+                                            type: "string",
+                                        },
                                     },
                                 },
-                                required: [
-                                    "name",
-                                    "address",
-                                    "phone",
-                                    "email",
-                                    "description",
-                                ],
+                                required: ["name", "doctors"],
                             },
                         },
                     },
@@ -784,31 +708,63 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        _id: { type: "string" },
-                                        name: { type: "string" },
-                                        address: { type: "string" },
-                                        phone: {
-                                            type: "string",
+                                        totalItems: { type: "integer" },
+                                        totalPages: { type: "integer" },
+                                        prevPage: {
+                                            type: "boolean",
+                                            default: false,
                                         },
-                                        email: {
-                                            type: "string",
+                                        nextPage: {
+                                            type: "boolean",
+                                            default: false,
                                         },
-                                        procedures: {
+                                        data: {
                                             type: "array",
-                                            items: { type: "string" },
-                                        },
-                                        doctors: {
-                                            type: "array",
-                                            items: { type: "string" },
-                                        },
-                                        description: {
-                                            type: "string",
-                                        },
-                                        createdAt: {
-                                            type: "string",
-                                        },
-                                        updatedAt: {
-                                            type: "string",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: { type: "string" },
+                                                    name: { type: "string" },
+                                                    doctors: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "object",
+                                                            properties: {
+                                                                _id: {
+                                                                    type: "string",
+                                                                },
+                                                                firstName: {
+                                                                    type: "string",
+                                                                },
+                                                                lastName: {
+                                                                    type: "string",
+                                                                },
+                                                                email: {
+                                                                    type: "string",
+                                                                },
+                                                                phone: {
+                                                                    type: "string",
+                                                                },
+                                                                procedures: {
+                                                                    type: "array",
+                                                                    items: {
+                                                                        type: "object",
+                                                                        properties:
+                                                                            {
+                                                                                _id: {
+                                                                                    type: "string",
+                                                                                },
+                                                                                name: {
+                                                                                    type: "string",
+                                                                                },
+                                                                            },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                     },
                                 },
@@ -825,6 +781,166 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         status: {
                                             type: "string",
                                             default: 400,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/clinics/{id}/update": {
+            patch: {
+                tags: ["Clinic"],
+                summary: "Update clinic by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Update clinic by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    doctors: {
+                                        type: "array",
+                                        items: {
+                                            type: "string",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Successfully get clinic",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        totalItems: { type: "integer" },
+                                        totalPages: { type: "integer" },
+                                        prevPage: {
+                                            type: "boolean",
+                                            default: false,
+                                        },
+                                        nextPage: {
+                                            type: "boolean",
+                                            default: false,
+                                        },
+                                        data: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: { type: "string" },
+                                                    name: { type: "string" },
+                                                    doctors: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "object",
+                                                            properties: {
+                                                                _id: {
+                                                                    type: "string",
+                                                                },
+                                                                firstName: {
+                                                                    type: "string",
+                                                                },
+                                                                lastName: {
+                                                                    type: "string",
+                                                                },
+                                                                email: {
+                                                                    type: "string",
+                                                                },
+                                                                phone: {
+                                                                    type: "string",
+                                                                },
+                                                                procedures: {
+                                                                    type: "array",
+                                                                    items: {
+                                                                        type: "object",
+                                                                        properties:
+                                                                            {
+                                                                                _id: {
+                                                                                    type: "string",
+                                                                                },
+                                                                                name: {
+                                                                                    type: "string",
+                                                                                },
+                                                                            },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/clinics/{id}/delete": {
+            delete: {
+                tags: ["Clinic"],
+                summary: "Delete clinic by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Delete clinic by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "204": {
+                        description: "Successfully delete clinic",
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
                                         },
                                         message: { type: "string" },
                                     },
@@ -854,15 +970,15 @@ export const swaggerDocument: OpenAPIV3.Document = {
                         schema: { type: "integer", default: 1 },
                     },
                     {
-                        name: "name",
+                        name: "firstName",
                         in: "query",
-                        description: "doctor name",
+                        description: "doctor firstname",
                         schema: { type: "string" },
                     },
                     {
-                        name: "surname",
+                        name: "lastName",
                         in: "query",
-                        description: "doctor surname",
+                        description: "doctor lastname",
                         schema: { type: "string" },
                     },
                     {
@@ -899,72 +1015,17 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                                     _id: {
                                                         type: "string",
                                                     },
-                                                    name: {
+                                                    firstName: {
                                                         type: "string",
                                                     },
-                                                    surname: {
-                                                        type: "string",
-                                                    },
-                                                    age: {
-                                                        type: "number",
-                                                    },
-                                                    phone: {
+                                                    lastName: {
                                                         type: "string",
                                                     },
                                                     email: {
                                                         type: "string",
                                                     },
-                                                    experience: {
-                                                        type: "number",
-                                                    },
-                                                    clinics: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "array",
-                                                            items: {
-                                                                type: "object",
-                                                                properties: {
-                                                                    _id: {
-                                                                        type: "string",
-                                                                    },
-                                                                    name: {
-                                                                        type: "string",
-                                                                    },
-                                                                    address: {
-                                                                        type: "string",
-                                                                    },
-                                                                    phone: {
-                                                                        type: "string",
-                                                                    },
-                                                                    email: {
-                                                                        type: "string",
-                                                                    },
-                                                                    procedures:
-                                                                        {
-                                                                            type: "array",
-                                                                            items: {
-                                                                                type: "string",
-                                                                            },
-                                                                        },
-                                                                    doctors: {
-                                                                        type: "array",
-                                                                        items: {
-                                                                            type: "string",
-                                                                        },
-                                                                    },
-                                                                    description:
-                                                                        {
-                                                                            type: "string",
-                                                                        },
-                                                                    createdAt: {
-                                                                        type: "string",
-                                                                    },
-                                                                    updatedAt: {
-                                                                        type: "string",
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
+                                                    phone: {
+                                                        type: "string",
                                                     },
                                                     procedures: {
                                                         type: "array",
@@ -979,12 +1040,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                                                 },
                                                             },
                                                         },
-                                                    },
-                                                    createdAt: {
-                                                        type: "string",
-                                                    },
-                                                    updatedAt: {
-                                                        type: "string",
                                                     },
                                                 },
                                             },
@@ -1021,70 +1076,17 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         _id: {
                                             type: "string",
                                         },
-                                        name: {
+                                        firstName: {
                                             type: "string",
                                         },
-                                        surname: {
-                                            type: "string",
-                                        },
-                                        age: {
-                                            type: "number",
-                                        },
-                                        phone: {
+                                        lastName: {
                                             type: "string",
                                         },
                                         email: {
                                             type: "string",
                                         },
-                                        experience: {
-                                            type: "number",
-                                        },
-                                        clinics: {
-                                            type: "array",
-                                            items: {
-                                                type: "array",
-                                                items: {
-                                                    type: "object",
-                                                    properties: {
-                                                        _id: {
-                                                            type: "string",
-                                                        },
-                                                        name: {
-                                                            type: "string",
-                                                        },
-                                                        address: {
-                                                            type: "string",
-                                                        },
-                                                        phone: {
-                                                            type: "string",
-                                                        },
-                                                        email: {
-                                                            type: "string",
-                                                        },
-                                                        procedures: {
-                                                            type: "array",
-                                                            items: {
-                                                                type: "string",
-                                                            },
-                                                        },
-                                                        doctors: {
-                                                            type: "array",
-                                                            items: {
-                                                                type: "string",
-                                                            },
-                                                        },
-                                                        description: {
-                                                            type: "string",
-                                                        },
-                                                        createdAt: {
-                                                            type: "string",
-                                                        },
-                                                        updatedAt: {
-                                                            type: "string",
-                                                        },
-                                                    },
-                                                },
-                                            },
+                                        phone: {
+                                            type: "string",
                                         },
                                         procedures: {
                                             type: "array",
@@ -1099,12 +1101,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                                     },
                                                 },
                                             },
-                                        },
-                                        createdAt: {
-                                            type: "string",
-                                        },
-                                        updatedAt: {
-                                            type: "string",
                                         },
                                     },
                                 },
@@ -1146,15 +1142,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                     surname: { type: "string" },
                                     email: { type: "string", format: "email" },
                                     phone: { type: "string" },
-                                    experience: { type: "string" },
-                                    age: { type: "integer" },
                                     procedures: {
-                                        type: "array",
-                                        items: {
-                                            type: "string",
-                                        },
-                                    },
-                                    clinics: {
                                         type: "array",
                                         items: {
                                             type: "string",
@@ -1166,10 +1154,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                     "surname",
                                     "email",
                                     "phone",
-                                    "experience",
-                                    "age",
                                     "procedures",
-                                    "clinics",
                                 ],
                             },
                         },
@@ -1183,29 +1168,35 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        _id: { type: "string" },
-                                        name: { type: "string" },
-                                        surname: { type: "string" },
+                                        _id: {
+                                            type: "string",
+                                        },
+                                        firstName: {
+                                            type: "string",
+                                        },
+                                        lastName: {
+                                            type: "string",
+                                        },
                                         email: {
                                             type: "string",
                                         },
-                                        phone: { type: "string" },
-                                        experience: { type: "string" },
-                                        age: { type: "integer" },
+                                        phone: {
+                                            type: "string",
+                                        },
                                         procedures: {
                                             type: "array",
                                             items: {
-                                                type: "string",
+                                                type: "object",
+                                                properties: {
+                                                    _id: {
+                                                        type: "string",
+                                                    },
+                                                    name: {
+                                                        type: "string",
+                                                    },
+                                                },
                                             },
                                         },
-                                        clinics: {
-                                            type: "array",
-                                            items: {
-                                                type: "string",
-                                            },
-                                        },
-                                        createdAt: { type: "string" },
-                                        updatedAt: { type: "string" },
                                     },
                                 },
                             },
@@ -1221,6 +1212,140 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                         status: {
                                             type: "string",
                                             default: 400,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/doctors/{id}/update": {
+            patch: {
+                tags: ["Doctor"],
+                summary: "Get doctor by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Get doctor by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    surname: { type: "string" },
+                                    email: { type: "string", format: "email" },
+                                    phone: { type: "string" },
+                                    procedures: {
+                                        type: "array",
+                                        items: {
+                                            type: "string",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Successfully get doctor",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: {
+                                            type: "string",
+                                        },
+                                        firstName: {
+                                            type: "string",
+                                        },
+                                        lastName: {
+                                            type: "string",
+                                        },
+                                        email: {
+                                            type: "string",
+                                        },
+                                        phone: {
+                                            type: "string",
+                                        },
+                                        procedures: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: {
+                                                        type: "string",
+                                                    },
+                                                    name: {
+                                                        type: "string",
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/doctors/{id}/delete": {
+            delete: {
+                tags: ["Doctor"],
+                summary: "Delete doctor  by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Delete doctor by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "204": {
+                        description: "Successfully delete doctor",
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
                                         },
                                         message: { type: "string" },
                                     },
@@ -1310,8 +1435,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                     properties: {
                                         _id: { type: "string" },
                                         name: { type: "string" },
-                                        createdAt: { type: "string" },
-                                        updatedAt: { type: "string" },
                                     },
                                 },
                             },
@@ -1390,6 +1513,104 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
+        "/procedures/{id}/update": {
+            patch: {
+                tags: ["Procedure"],
+                summary: "Get procedure by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Get procedure by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Successfully get procedure",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        "/procedures/{id}/delete": {
+            delete: {
+                tags: ["Procedure"],
+                summary: "Delete procedure by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Delete procedure by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "204": {
+                        description: "Successfully delete procedure",
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
         "/users": {
             get: {
                 tags: ["User"],
@@ -1405,17 +1626,14 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                     items: {
                                         type: "object",
                                         properties: {
-                                            isActive: { type: "boolean" },
                                             _id: { type: "string" },
                                             name: { type: "string" },
+                                            surname: { type: "string" },
                                             email: {
                                                 type: "string",
                                             },
-                                            surname: { type: "string" },
                                             role: { type: "string" },
-                                            isVerified: { type: "boolean" },
-                                            createdAt: { type: "string" },
-                                            updatedAt: { type: "string" },
+                                            isActive: { type: "boolean" },
                                         },
                                     },
                                 },
@@ -1446,17 +1664,14 @@ export const swaggerDocument: OpenAPIV3.Document = {
                                 schema: {
                                     type: "object",
                                     properties: {
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                        surname: { type: "string" },
                                         email: {
                                             type: "string",
                                         },
                                         role: { type: "string" },
-                                        name: { type: "string" },
-                                        surname: { type: "string" },
                                         isActive: { type: "boolean" },
-                                        isVerified: { type: "boolean" },
-                                        _id: { type: "string" },
-                                        createdAt: { type: "string" },
-                                        updatedAt: { type: "string" },
                                     },
                                 },
                             },
