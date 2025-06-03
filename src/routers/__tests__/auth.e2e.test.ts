@@ -9,6 +9,25 @@ const user = {
     password: "a2A!abcd",
 };
 
+const wrongEmail = "wrong@email.com";
+
+// const addToken = (req, token: string) => req.set("Authorization", `Bearer ${token}`);
+
+// const getUserToken = async () => {
+//     await request(app).post("/auth/sign-up").send(user);
+//     const loginRes = await request(app).post("/auth/sign-in").send({
+//         email: user.email,
+//         password: user.password,
+//     });
+//     return loginRes.body.tokens.accessToken;
+// };
+
+const registerUser = async () => await request(app).post("/auth/sign-up").send(user);
+const loginUser = async (email: string, password: string) => await request(app).post("/auth/sign-in").send({
+    email,
+    password,
+});
+
 describe("POST /auth/sign-up", () => {
     beforeAll(async () => {
         await startServer();
@@ -24,17 +43,19 @@ describe("POST /auth/sign-up", () => {
     });
 
     it("should register new user", async () => {
-        const res = await request(app).post("/auth/sign-up").send(user);
-
+        const res = await registerUser();
+        console.log({ user: res.body });
         expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual(expect.objectContaining({
-            user: expect.objectContaining({
-                _id: expect.any(String),
+            user: {
+                _id: res.body.user._id,
                 name: user.name,
                 surname: user.surname,
                 email: user.email,
+                isActive: false,
+                role: "user",
 
-            }),
+            },
             tokens: expect.objectContaining({
                 accessToken: expect.any(String),
                 refreshToken: expect.any(String),
@@ -43,8 +64,8 @@ describe("POST /auth/sign-up", () => {
     });
 
     it("should return error when email is in use", async () => {
-        await request(app).post("/auth/sign-up").send(user);
-        const res = await request(app).post("/auth/sign-up").send(user);
+        await registerUser();
+        const res = await registerUser();
 
         expect(res.statusCode).toEqual(400);
         expect(res.body.message).toBe("User is already exists");
@@ -58,7 +79,7 @@ describe("POST /auth/sign-in", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await request(app).post("/auth/sign-up").send(user);
+        await registerUser();
     });
 
     afterAll(async () => {
@@ -67,20 +88,19 @@ describe("POST /auth/sign-in", () => {
     });
 
     it("should return user with tokens", async () => {
-        const res = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
+        const res = await loginUser(user.email, user.password);
 
         expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual(expect.objectContaining({
-            user: expect.objectContaining({
-                _id: expect.any(String),
+            user: {
+                _id: res.body.user._id,
                 name: user.name,
                 surname: user.surname,
                 email: user.email,
+                isActive: false,
+                role: "user",
 
-            }),
+            },
             tokens: expect.objectContaining({
                 accessToken: expect.any(String),
                 refreshToken: expect.any(String),
@@ -88,11 +108,8 @@ describe("POST /auth/sign-in", () => {
         }));
     });
 
-    it("should return error when email is in use", async () => {
-        const res = await request(app).post("/auth/sign-in").send({
-            email: "wrong@email.com",
-            password: user.password,
-        });
+    it("should return error when invalid credentials", async () => {
+        const res = await loginUser(wrongEmail, user.password);
         expect(res.statusCode).toEqual(401);
         expect(res.body.message).toBe("Invalid email or password");
     });
