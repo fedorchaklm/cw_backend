@@ -4,8 +4,7 @@ import mongoose from "mongoose";
 import { RoleEnum } from "../../enums/role.enum";
 import { User } from "../../models/user.model";
 import bcrypt from "bcrypt";
-// import { tokenService } from "../../services/token.service";
-// import { tokenRepository } from "../../repositories/token.repository";
+import { IProcedureCreateDTO } from "../../interfaces/procedure.interface";
 
 const user = {
     email: "sun.jones.2@gmail.com",
@@ -30,8 +29,37 @@ const procedureMain = {
     name: "main procedure",
 };
 
+const addToken = (req, token: string) => req.set("Authorization", `Bearer ${token}`);
+
+const getAdminToken = async () => {
+    await User.create({
+        ...admin,
+        password: await bcrypt.hash(admin.password, 10),
+    });
+    const res = await request(app).post("/auth/sign-in").send({
+        email: admin.email,
+        password: admin.password,
+    });
+    return res.body.tokens.accessToken;
+};
+
+const getUserToken = async () => {
+    await request(app).post("/auth/sign-up").send(user);
+    const loginRes = await request(app).post("/auth/sign-in").send({
+        email: user.email,
+        password: user.password,
+    });
+    return loginRes.body.tokens.accessToken;
+};
+
+const createProcedure = (procedure: IProcedureCreateDTO, adminToken: string) => addToken(request(app).post("/procedures"), adminToken).send(procedure);
+const getProcedures = (token: string) => addToken(request(app).get("/procedures"), token);
+const getProceduresByName = (name: string, token: string) => addToken(request(app).get(`/procedures?name=${name}`), token);
+const getProcedureById = (id: string, token: string) => addToken(request(app).get(`/procedures/${id}`).set("Authorization", `Bearer ${token}`), token);
+const updateProcedureById = (id: string, procedure: IProcedureCreateDTO, adminToken: string) => addToken(request(app).patch(`/procedures/${id}`), adminToken).send(procedure);
+const deleteProcedureById = (id: string, token: string) => addToken(request(app).delete(`/procedures/${id}`).set("Authorization", `Bearer ${token}`), token);
+
 describe("POST /procedures", () => {
-    let token: string;
 
     beforeAll(async () => {
         await startServer();
@@ -39,20 +67,6 @@ describe("POST /procedures", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await User.create({
-            ...admin,
-            password: await bcrypt.hash(admin.password, 10),
-        });
-        // const tokens = tokenService.generateTokens({
-        //     userId: createdAdmin._id,
-        //     role: createdAdmin.role as RoleEnum,
-        // });
-        // await tokenRepository.create({ ...tokens, _userId: createdAdmin._id });
-        const res = await request(app).post("/auth/sign-in").send({
-            email: admin.email,
-            password: admin.password,
-        });
-        token = res.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -61,7 +75,8 @@ describe("POST /procedures", () => {
     });
 
     it("should create a new procedure", async () => {
-        const res = await request(app).post("/procedures").send(procedure).set("Authorization", `Bearer ${token}`);
+        const adminToken = await getAdminToken();
+        const res = await createProcedure(procedure, adminToken);
 
         expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual(expect.objectContaining({
@@ -71,21 +86,17 @@ describe("POST /procedures", () => {
     });
 
     it("should return error when such procedure is already exists", async () => {
-        await request(app).post("/procedures").send(procedure).set("Authorization", `Bearer ${token}`);
-        const res = await request(app).post("/procedures").send(procedure).set("Authorization", `Bearer ${token}`);
+        const adminToken = await getAdminToken();
+        await createProcedure(procedure, adminToken);
+        const res = await createProcedure(procedure, adminToken);
 
         expect(res.statusCode).toEqual(400);
         expect(res.body.message).toBe(`Procedure ${procedure.name} already exists!`);
     });
 
     it("should return error not permitted", async () => {
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        const userToken = loginRes.body.tokens.accessToken;
-        const res = await request(app).post("/procedures").send(procedure).set("Authorization", `Bearer ${userToken}`);
+        const userToken = await getUserToken();
+        const res = await createProcedure(procedure, userToken);
 
         expect(res.statusCode).toEqual(403);
         expect(res.body.message).toBe("No has permissions");
@@ -93,8 +104,6 @@ describe("POST /procedures", () => {
 });
 
 describe("GET all /procedures", () => {
-    let token: string;
-    let userToken: string;
 
     beforeAll(async () => {
         await startServer();
@@ -102,23 +111,6 @@ describe("GET all /procedures", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await User.create({
-            ...admin,
-            password: await bcrypt.hash(admin.password, 10),
-        });
-        const res = await request(app).post("/auth/sign-in").send({
-            email: admin.email,
-            password: admin.password,
-        });
-        token = res.body.tokens.accessToken;
-        await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedure);
-        await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedureMain);
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        userToken = loginRes.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -127,15 +119,22 @@ describe("GET all /procedures", () => {
     });
 
     it("should return all procedures", async () => {
-        const res = await request(app).get("/procedures").set("Authorization", `Bearer ${userToken}`);
-        console.log({ procedures: res.body.procedures });
+        const adminToken = await getAdminToken();
+        await createProcedure(procedure, adminToken);
+        await createProcedure(procedureMain, adminToken);
+        const res = await getProcedures(adminToken);
+
         expect(res.statusCode).toEqual(200);
         expect(res.body.data.length).toBe(2);
         expect(res.body.data[0]).toHaveProperty("name");
     });
 
     it("should return all procedures such have word some ", async () => {
-        const res = await request(app).get("/procedures?name=some").set("Authorization", `Bearer ${userToken}`);
+        const adminToken = await getAdminToken();
+        await createProcedure(procedure, adminToken);
+        await createProcedure(procedureMain, adminToken);
+        const res = await getProceduresByName("some", adminToken);
+
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toEqual(expect.arrayContaining([
             expect.objectContaining({
@@ -147,9 +146,6 @@ describe("GET all /procedures", () => {
 });
 
 describe("GET by id /procedures", () => {
-    let token: string;
-    let userToken: string;
-    let createdProcedure;
 
     beforeAll(async () => {
         await startServer();
@@ -157,22 +153,6 @@ describe("GET by id /procedures", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await User.create({
-            ...admin,
-            password: await bcrypt.hash(admin.password, 10),
-        });
-        const res = await request(app).post("/auth/sign-in").send({
-            email: admin.email,
-            password: admin.password,
-        });
-        token = res.body.tokens.accessToken;
-        createdProcedure = await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedure);
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        userToken = loginRes.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -181,7 +161,9 @@ describe("GET by id /procedures", () => {
     });
 
     it("should return procedure by id", async () => {
-        const res = await request(app).get(`/procedures/${createdProcedure.body._id}`).set("Authorization", `Bearer ${userToken}`);
+        const adminToken = await getAdminToken();
+        const createdProcedure = await createProcedure(procedure, adminToken);
+        const res = await getProcedureById(createdProcedure.body._id, adminToken);
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(expect.objectContaining({
@@ -191,8 +173,9 @@ describe("GET by id /procedures", () => {
     });
 
     it("should return error when procedure with such id not found", async () => {
-        const fakeId = new mongoose.Types.ObjectId();
-        const res = await request(app).get(`/procedures/${fakeId}`).set("Authorization", `Bearer ${token}`);
+        const fakeId = new mongoose.Types.ObjectId().toString();
+        const adminToken = await getAdminToken();
+        const res = await getProcedureById(fakeId, adminToken);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Procedure with such id ${fakeId} not found!`);
@@ -200,8 +183,6 @@ describe("GET by id /procedures", () => {
 });
 
 describe("PATCH update by id /procedures", () => {
-    let token: string;
-    let createdProcedure;
 
     beforeAll(async () => {
         await startServer();
@@ -209,18 +190,6 @@ describe("PATCH update by id /procedures", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await User.create({
-            ...admin,
-            password: await bcrypt.hash(admin.password, 10),
-        });
-        const res = await request(app).post("/auth/sign-in").send({
-            email: admin.email,
-            password: admin.password,
-        });
-        token = res.body.tokens.accessToken;
-        console.log({ token });
-        createdProcedure = await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedure);
-        console.log({ createdProcedure: createdProcedure.body });
     });
 
     afterAll(async () => {
@@ -229,7 +198,9 @@ describe("PATCH update by id /procedures", () => {
     });
 
     it("should return updated procedure by id", async () => {
-        const res = await request(app).patch(`/procedures/${createdProcedure.body._id}`).set("Authorization", `Bearer ${token}`).send(procedureMain);
+        const adminToken = await getAdminToken();
+        const createdProcedure = await createProcedure(procedure, adminToken);
+        const res = await updateProcedureById(createdProcedure.body._id, { name: procedureMain.name }, adminToken);
         console.log({ res: res.body });
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(expect.objectContaining({
@@ -239,21 +210,19 @@ describe("PATCH update by id /procedures", () => {
     });
 
     it("should return error when procedure with such id not found", async () => {
-        const fakeId = new mongoose.Types.ObjectId();
-        const res = await request(app).patch(`/procedures/${fakeId}`).set("Authorization", `Bearer ${token}`).send(procedureMain);
+        const adminToken = await getAdminToken();
+        const fakeId = new mongoose.Types.ObjectId().toString();
+        const res = await updateProcedureById(fakeId, { name: procedureMain.name }, adminToken);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Procedure with such id ${fakeId} not found!`);
     });
 
     it("should return error not permitted", async () => {
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        const userToken = loginRes.body.tokens.accessToken;
-        const res = await request(app).patch(`/procedures/${createdProcedure.body._id}`).set("Authorization", `Bearer ${userToken}`).send(procedureMain);
+        const adminToken = await getAdminToken();
+        const createdProcedure = await createProcedure(procedure, adminToken);
+        const userToken = await getUserToken();
+        const res = await updateProcedureById(createdProcedure.body._id, { name: procedureMain.name }, userToken);
 
         expect(res.statusCode).toEqual(403);
         expect(res.body.message).toBe("No has permissions");
@@ -261,8 +230,6 @@ describe("PATCH update by id /procedures", () => {
 });
 
 describe("DELETE by id /procedures", () => {
-    let token: string;
-    let createdProcedure;
 
     beforeAll(async () => {
         await startServer();
@@ -270,18 +237,6 @@ describe("DELETE by id /procedures", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await User.create({
-            ...admin,
-            password: await bcrypt.hash(admin.password, 10),
-        });
-        const res = await request(app).post("/auth/sign-in").send({
-            email: admin.email,
-            password: admin.password,
-        });
-        token = res.body.tokens.accessToken;
-        console.log({ token });
-        createdProcedure = await request(app).post("/procedures").set("Authorization", `Bearer ${token}`).send(procedure);
-        console.log({ createdProcedure: createdProcedure.body });
     });
 
     afterAll(async () => {
@@ -290,27 +245,27 @@ describe("DELETE by id /procedures", () => {
     });
 
     it("should delete procedure by id", async () => {
-        const res = await request(app).delete(`/procedures/${createdProcedure.body._id}`).set("Authorization", `Bearer ${token}`);
+        const adminToken = await getAdminToken();
+        const createdProcedure = await createProcedure(procedure, adminToken);
+        const res = await deleteProcedureById(createdProcedure.body._id, adminToken);
 
         expect(res.statusCode).toBe(204);
     });
 
     it("should return error when procedure with such id not found", async () => {
-        const fakeId = new mongoose.Types.ObjectId();
-        const res = await request(app).delete(`/procedures/${fakeId}`).set("Authorization", `Bearer ${token}`);
+        const adminToken = await getAdminToken();
+        const fakeId = new mongoose.Types.ObjectId().toString();
+        const res = await deleteProcedureById(fakeId, adminToken);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Procedure with such id ${fakeId} not found!`);
     });
 
     it("should return error not permitted", async () => {
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        const userToken = loginRes.body.tokens.accessToken;
-        const res = await request(app).delete(`/procedures/${createdProcedure.body._id}`).set("Authorization", `Bearer ${userToken}`).send(procedureMain);
+        const adminToken = await getAdminToken();
+        const createdProcedure = await createProcedure(procedure, adminToken);
+        const userToken = await getUserToken();
+        const res = await deleteProcedureById(createdProcedure.body._id, userToken);
 
         expect(res.statusCode).toEqual(403);
         expect(res.body.message).toBe("No has permissions");
