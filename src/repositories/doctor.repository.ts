@@ -14,11 +14,11 @@ class DoctorRepository {
         const filterObject: FilterQuery<IDoctor> = {};
         const skip = query.pageSize * (query.page - 1);
 
-        if (query.name) {
-            filterObject.name = { $regex: query.name, $options: "i" };
+        if (query.firstName) {
+            filterObject.firstName = { $regex: query.firstName, $options: "i" };
         }
-        if (query.surname) {
-            filterObject.surname = { $regex: query.surname, $options: "i" };
+        if (query.lastName) {
+            filterObject.lastName = { $regex: query.lastName, $options: "i" };
         }
         if (query.email) {
             filterObject.email = { $regex: query.email, $options: "i" };
@@ -32,28 +32,31 @@ class DoctorRepository {
                 .limit(query.pageSize)
                 .skip(skip)
                 .sort(query.orderBy)
-                .populate("clinics")
+                // .populate("clinics")
                 .populate("procedures"),
             Doctor.find(filterObject).countDocuments(),
         ]);
     };
 
     public getById(id: string): Promise<IDoctor> {
-        return Doctor.findById(id).populate("clinics").populate("procedures");
+        return Doctor.findById(id).populate("procedures");
     }
 
-    public async create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
-        const createdDoctor = await Doctor.create(doctor);
-        return createdDoctor.toObject();
+    public create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
+        // const createdDoctor = await Doctor.create(doctor);
+        // return createdDoctor.toObject();
+        return Doctor.create(doctor);
     }
 
     public updateById(
         doctorId: string,
         doctor: Partial<IDoctor>,
     ): Promise<IDoctor> {
-        return Doctor.findByIdAndUpdate(doctorId, doctor, { new: true })
-            .populate("clinics")
-            .populate("procedures");
+        return (
+            Doctor.findByIdAndUpdate(doctorId, doctor, { new: true })
+                // .populate("clinics")
+                .populate("procedures")
+        );
     }
 
     public deleteById(doctorId: string): Promise<IDoctor> {

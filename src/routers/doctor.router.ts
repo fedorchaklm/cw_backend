@@ -15,6 +15,8 @@ router.get(
 );
 router.post(
     "/",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     commonMiddleware.validateBody(DoctorValidator.create),
     doctorController.create,
 );
@@ -27,12 +29,16 @@ router.get(
 router.patch(
     "/:id",
     commonMiddleware.isValidate("id"),
-    // commonMiddleware.validateBody(DoctorValidator.update),
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
+    commonMiddleware.validateBody(DoctorValidator.update),
     doctorController.updateById,
 );
 router.delete(
     "/:id",
     commonMiddleware.isValidate("id"),
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     doctorController.deleteById,
 );
 

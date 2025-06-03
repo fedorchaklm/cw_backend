@@ -5,9 +5,9 @@ import {
     IDoctor,
     IDoctorCreateDTO,
     IDoctorQuery,
+    IDoctorUpdateDTO,
 } from "../interfaces/doctor.interface";
 import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
-import { clinicService } from "../services/clinic.service";
 import { doctorService } from "../services/doctor.service";
 
 class DoctorController {
@@ -47,30 +47,12 @@ class DoctorController {
         try {
             const doctor = req.body as IDoctorCreateDTO;
             await doctorService.isEmailUnique(doctor.email);
-            // const clinicIds = await clinicService.getClinicsIdsFromNames(
-            //     doctor.clinics,
-            // );
-            // const procedureIds =
-            //     await procedureService.getProceduresIdsFromNames(
-            //         doctor.procedures,
-            //     );
-            // const data = await doctorService.create({
-            //     ...doctor,
-            //     clinics: doctor.clinics,
-            //     procedures: doctor.procedures,
-            // });
-            // await clinicService.addDoctorToClinics(data._id, doctor.clinics);
-            // res.status(StatusCodesEnum.CREATED).json({
-            //     ...data,
-            //     clinics: doctor.clinics,
-            //     procedures: doctor.procedures,
-            // });
             const data = await doctorService.create(doctor);
-            await clinicService.addDoctorToClinics(data._id, doctor.clinics);
-            await clinicService.addProcedureToClinic(
-                doctor.clinics,
-                doctor.procedures,
-            );
+            // await clinicService.addDoctorToClinics(data._id, doctor.clinics);
+            // await clinicService.addProcedureToClinic(
+            //     doctor.clinics,
+            //     doctor.procedures,
+            // );
             res.status(StatusCodesEnum.CREATED).json(data);
         } catch (e) {
             next(e);
@@ -84,7 +66,8 @@ class DoctorController {
     ) {
         try {
             const { id } = req.params;
-            const doctor = req.body as IDoctorCreateDTO;
+            const doctor = req.body as IDoctorUpdateDTO;
+            console.log(">", { id, doctor });
             const updatedDoctor = await doctorService.updateById(id, doctor);
             res.status(StatusCodesEnum.OK).json(updatedDoctor);
         } catch (e) {

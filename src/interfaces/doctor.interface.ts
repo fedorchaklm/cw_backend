@@ -3,25 +3,27 @@ import { IBase } from "./base.interface";
 
 export interface IDoctor extends IBase {
     _id: string;
-    name: string;
-    surname: string;
-    age: number;
+    firstName: string;
+    lastName: string;
     email: string;
     phone: string;
-    experience: number;
-    clinics: Array<string>;
     procedures: Array<string>;
+    // age: number;
+    // experience: number;
+    // clinics: Array<string>;
     // isDeleted: boolean;
 }
 
 export interface IDoctorQuery {
     pageSize: number;
     page: number;
-    name?: string;
-    surname?: string;
+    firstName?: string;
+    lastName?: string;
     email?: string;
     phone?: string;
     orderBy?: QueryOrderEnum;
 }
 
-export type IDoctorCreateDTO = Omit<IDoctor, "_id" | "isDeleted">;
+export type IDoctorCreateDTO = Omit<IDoctor, "_id" | "createdAt" | "updatedAt">;
+
+export type IDoctorUpdateDTO = Partial<IDoctor>;

@@ -12,4 +12,7 @@ export interface IProcedureQuery {
     // orderBy?: string;
 }
 
-export type IProcedureCreateDTO = Omit<IProcedure, "_id">;
+export type IProcedureCreateDTO = Omit<
+    IProcedure,
+    "_id" | "createdAt" | "updatedAt"
+>;
