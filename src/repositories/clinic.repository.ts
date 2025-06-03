@@ -48,14 +48,14 @@ class ClinicRepository {
                 .limit(query.pageSize)
                 .skip(skip)
                 .sort(QueryOrderEnum.NAME)
-                .populate("doctors")
-                .populate("procedures"),
+                .populate("doctors"),
+            // .populate("procedures"),
             Clinic.find(filterObject).countDocuments(),
         ]);
     };
 
     public getById(id: string): Promise<any> {
-        return Clinic.findById(id).populate("doctors").populate("procedures");
+        return Clinic.findById(id).populate("doctors");
     }
 
     public getByName(name: string): Promise<IClinic> {

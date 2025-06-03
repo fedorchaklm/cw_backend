@@ -1,14 +1,13 @@
-import { ClinicQueryOrderEnum } from "../enums/clinic-query-order.enum";
 import { IBase } from "./base.interface";
 
 export interface IClinic extends IBase {
     _id: string;
     name: string;
-    address: string;
-    phone: string;
-    email: string;
-    description: string;
-    procedures: Array<string>;
+    // address: string;
+    // phone: string;
+    // email: string;
+    // description: string;
+    // procedures: Array<string>;
     doctors: Array<string>;
     // isDeleted: boolean;
 }
@@ -31,7 +30,9 @@ export interface IClinicQuery {
     name?: string;
     procedures?: string;
     doctors?: string;
-    orderBy?: ClinicQueryOrderEnum;
+    // orderBy?: ClinicQueryOrderEnum;
 }
 
-export type IClinicCreateDTO = Omit<IClinic, "_id" | "isDeleted">;
+export type IClinicCreateDTO = Omit<IClinic, "_id" | "createdAt" | "updatedAt">;
+
+export type IClinicUpdateDTO = Partial<IClinic>;

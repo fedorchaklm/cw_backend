@@ -68,48 +68,48 @@ class ClinicService {
         return await clinicRepository.deleteById(clinicId);
     }
 
-    public async getClinicsIdsFromNames(
-        clinicNames: Array<string>,
-    ): Promise<Array<string>> {
-        const clinicIds = [];
-        for (const name of clinicNames) {
-            const clinic = await this.getByName(name);
-            if (!clinic) {
-                throw new ApiError(
-                    `Clinic '${name}' was not found`,
-                    StatusCodesEnum.NOT_FOUND,
-                );
-            }
-            clinicIds.push(clinic._id);
-        }
-        return clinicIds;
-    }
+    // public async getClinicsIdsFromNames(
+    //     clinicNames: Array<string>,
+    // ): Promise<Array<string>> {
+    //     const clinicIds = [];
+    //     for (const name of clinicNames) {
+    //         const clinic = await this.getByName(name);
+    //         if (!clinic) {
+    //             throw new ApiError(
+    //                 `Clinic '${name}' was not found`,
+    //                 StatusCodesEnum.NOT_FOUND,
+    //             );
+    //         }
+    //         clinicIds.push(clinic._id);
+    //     }
+    //     return clinicIds;
+    // }
 
-    public async addDoctorToClinics(
-        doctorId: string,
-        clinicIds: Array<string>,
-    ): Promise<void> {
-        for (const clinicId of clinicIds) {
-            const clinic = await this.getById(clinicId);
-            if (!clinic.doctors.includes(doctorId)) {
-                clinic.doctors.push(doctorId);
-            }
-            await this.updateById(clinicId, clinic);
-        }
-    }
+    // public async addDoctorToClinics(
+    //     doctorId: string,
+    //     clinicIds: Array<string>,
+    // ): Promise<void> {
+    //     for (const clinicId of clinicIds) {
+    //         const clinic = await this.getById(clinicId);
+    //         if (!clinic.doctors.includes(doctorId)) {
+    //             clinic.doctors.push(doctorId);
+    //         }
+    //         await this.updateById(clinicId, clinic);
+    //     }
+    // }
 
-    public async addProcedureToClinic(
-        clinicIds: Array<string>,
-        procedureIds: Array<string>,
-    ): Promise<void> {
-        for (const clinicId of clinicIds) {
-            const clinic = await this.getById(clinicId);
-            clinic.procedures = [
-                ...new Set([...procedureIds, ...clinic.procedures]),
-            ];
-            await this.updateById(clinicId, clinic);
-        }
-    }
+    // public async addProcedureToClinic(
+    //     clinicIds: Array<string>,
+    //     procedureIds: Array<string>,
+    // ): Promise<void> {
+    //     for (const clinicId of clinicIds) {
+    //         const clinic = await this.getById(clinicId);
+    //         clinic.procedures = [
+    //             ...new Set([...procedureIds, ...clinic.procedures]),
+    //         ];
+    //         await this.updateById(clinicId, clinic);
+    //     }
+    // }
 }
 
 export const clinicService = new ClinicService();

@@ -15,6 +15,8 @@ router.get(
 );
 router.post(
     "/",
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     commonMiddleware.validateBody(ClinicValidator.create),
     clinicController.create,
 );
@@ -27,12 +29,16 @@ router.get(
 router.patch(
     "/:id",
     commonMiddleware.isValidate("id"),
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     commonMiddleware.validateBody(ClinicValidator.update),
     clinicController.updateById,
 );
 router.delete(
     "/:id",
     commonMiddleware.isValidate("id"),
+    authMiddleware.checkAccessToken,
+    authMiddleware.isAdmin,
     clinicController.deleteById,
 );
 

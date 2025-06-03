@@ -1,6 +1,10 @@
 import request from "supertest";
 import app, { startServer, stopServer } from "../../main";
 import mongoose from "mongoose";
+import { User } from "../../models/user.model";
+import bcrypt from "bcrypt";
+import { IClinicCreateDTO, IClinicUpdateDTO } from "../../interfaces/clinic.interface";
+import { RoleEnum } from "../../enums/role.enum";
 
 const user = {
     email: "sun.jones.2@gmail.com",
@@ -9,24 +13,60 @@ const user = {
     password: "a2A!abcd",
 };
 
+const admin = {
+    email: "admin@gmail.com",
+    name: "admin",
+    surname: "Admin",
+    password: "P@ssword123",
+    role: RoleEnum.ADMIN,
+};
+
 const clinic = {
     name: "Lvyv Hospital",
-    address: "ghsdkhn 3",
-    phone: "0661245782",
-    email: "hgsjdh@gmail.com",
-    description: "fjgkhj fghbr fgfhfh",
+    doctors: [],
 };
 
 const mainClinic = {
     name: "Kyiv Hospital",
-    address: "ghsdkhn 3",
-    phone: "0661245742",
-    email: "main_kyivh@gmail.com",
-    description: "fjgkhj fghbr fgfhfh",
+    doctors: [],
 };
 
+// const procedure: IProcedureCreateDTO = {
+//     name: "some procedure",
+// };
+
+const addToken = (req, token: string) => req.set("Authorization", `Bearer ${token}`);
+
+const getAdminToken = async () => {
+    await User.create({
+        ...admin,
+        password: await bcrypt.hash(admin.password, 10),
+    });
+    const res = await request(app).post("/auth/sign-in").send({
+        email: admin.email,
+        password: admin.password,
+    });
+    return res.body.tokens.accessToken;
+};
+
+const getUserToken = async () => {
+    await request(app).post("/auth/sign-up").send(user);
+    const loginRes = await request(app).post("/auth/sign-in").send({
+        email: user.email,
+        password: user.password,
+    });
+    return loginRes.body.tokens.accessToken;
+};
+
+const createClinic = (clinic: IClinicCreateDTO, adminToken: string) => addToken(request(app).post("/clinics"), adminToken).send(clinic);
+// const createDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
+// const createProcedure = (procedure: IProcedureCreateDTO, adminToken: string) => addToken(request(app).post("/procedures"), adminToken).send(procedure);
+const getClinics = (token: string) => addToken(request(app).get("/clinics"), token);
+const getClinicById = (id: string, token: string) => addToken(request(app).get(`/clinics/${id}`).set("Authorization", `Bearer ${token}`), token);
+const updateClinicById = (id: string, clinic: IClinicUpdateDTO, adminToken: string) => addToken(request(app).patch(`/clinics/${id}`), adminToken).send(clinic);
+const deleteClinicById = (id: string, token: string) => addToken(request(app).delete(`/clinics/${id}`).set("Authorization", `Bearer ${token}`), token);
+
 describe("POST /clinics", () => {
-    let token: string;
 
     beforeAll(async () => {
         await startServer();
@@ -34,13 +74,6 @@ describe("POST /clinics", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await request(app).post("/auth/sign-up").send(user);
-        // await request(app).patch(`/users/${createdUser.body._id}/unblock`);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        token = loginRes.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -49,30 +82,36 @@ describe("POST /clinics", () => {
     });
 
     it("should create a new clinic", async () => {
-        const res = await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(clinic);
+        const adminToken = await getAdminToken();
+        const res = await createClinic(clinic, adminToken);
 
         expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual(expect.objectContaining({
             _id: expect.any(String),
             name: clinic.name,
-            address: clinic.address,
-            phone: clinic.phone,
-            email: clinic.email,
-            description: clinic.description,
+            doctors: [],
         }));
     });
 
     it("should return error when such clinic is already exists", async () => {
-        await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(clinic);
-        const res = await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(clinic);
+        const adminToken = await getAdminToken();
+        await createClinic(clinic, adminToken);
+        const res = await createClinic(clinic, adminToken);
 
         expect(res.statusCode).toEqual(400);
         expect(res.body.message).toBe(`Clinic ${clinic.name} already exists!`);
     });
+
+    it("should return error not permitted", async () => {
+        const userToken = await getUserToken();
+        const res = await createClinic(clinic, userToken);
+
+        expect(res.statusCode).toEqual(403);
+        expect(res.body.message).toBe("No has permissions");
+    });
 });
 
 describe("GET /clinics", () => {
-    let token: string;
 
     beforeAll(async () => {
         await startServer();
@@ -80,12 +119,6 @@ describe("GET /clinics", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        token = loginRes.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -94,42 +127,29 @@ describe("GET /clinics", () => {
     });
 
     it("should return all clinics", async () => {
-        await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(clinic);
-        await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(mainClinic);
-        const res = await request(app).get("/clinics").set("Authorization", `Bearer ${token}`);
+        const adminToken = await getAdminToken();
+        const createdClinic = await createClinic(clinic, adminToken);
+        const createdMainClinic = await createClinic(mainClinic, adminToken);
+        const res = await getClinics(adminToken);
+
         expect(res.statusCode).toEqual(200);
         expect(res.body.data.length).toBe(2);
-        expect(res.body.data).toEqual(expect.arrayContaining([
-            {
-                name: clinic.name,
-                address: clinic.address,
-                phone: clinic.phone,
-                email: clinic.email,
-                procedures: [],
-                doctors: [],
-                description: clinic.description,
-                _id: expect.any(String),
-                createdAt: expect.any(String),
-                updatedAt: expect.any(String),
-            },
+        expect(res.body.data).toEqual([
             {
                 name: mainClinic.name,
-                address: mainClinic.address,
-                phone: mainClinic.phone,
-                email: mainClinic.email,
-                procedures: [],
                 doctors: [],
-                description: mainClinic.description,
-                _id: expect.any(String),
-                createdAt: expect.any(String),
-                updatedAt: expect.any(String),
-            }
-        ]));
+                _id: createdMainClinic.body._id,
+            },
+            {
+                name: clinic.name,
+                doctors: [],
+                _id: createdClinic.body._id,
+            },
+        ]);
     });
 });
 
 describe("GET by id /clinics", () => {
-    let token: string;
 
     beforeAll(async () => {
         await startServer();
@@ -137,12 +157,6 @@ describe("GET by id /clinics", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        token = loginRes.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -151,35 +165,29 @@ describe("GET by id /clinics", () => {
     });
 
     it("should return clinic by id", async () => {
-        const createdClinic = await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(clinic);
-        const res = await request(app).get(`/clinics/${createdClinic.body._id}`).set("Authorization", `Bearer ${token}`);
+        const adminToken = await getAdminToken();
+        const createdClinic = await createClinic(clinic, adminToken);
+        const res = await getClinicById(createdClinic.body._id, adminToken);
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({
             name: clinic.name,
-            address: clinic.address,
-            phone: clinic.phone,
-            email: clinic.email,
-            procedures: [],
             doctors: [],
-            description: clinic.description,
-            _id: expect.any(String),
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
+            _id: createdClinic.body._id,
         });
     });
 
     it("should return error when clinic with such id not found", async () => {
-        const fakeId = new mongoose.Types.ObjectId();
-        const res = await request(app).get(`/clinics/${fakeId}`).set("Authorization", `Bearer ${token}`);
+        const fakeId = new mongoose.Types.ObjectId().toString();
+        const adminToken = await getAdminToken();
+        const res = await getClinicById(fakeId, adminToken);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Clinic with such id ${fakeId} not found!`);
     });
 });
 
-describe("PATCH /clinics", () => {
-    let token: string;
+describe("PATCH by id /clinics", () => {
 
     beforeAll(async () => {
         await startServer();
@@ -187,12 +195,6 @@ describe("PATCH /clinics", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        token = loginRes.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -201,27 +203,22 @@ describe("PATCH /clinics", () => {
     });
 
     it("should return clinic by id", async () => {
-        const createdClinic = await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(clinic);
-        const res = await request(app).patch(`/clinics/${createdClinic.body._id}`).set("Authorization", `Bearer ${token}`).send(mainClinic);
+        const adminToken = await getAdminToken();
+        const createdClinic = await createClinic(clinic, adminToken);
+        const res = await updateClinicById(createdClinic.body._id, { name: mainClinic.name }, adminToken);
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({
             name: mainClinic.name,
-            address: mainClinic.address,
-            phone: mainClinic.phone,
-            email: mainClinic.email,
-            procedures: [],
             doctors: [],
-            description: mainClinic.description,
-            _id: expect.any(String),
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
+            _id: createdClinic.body._id,
         });
     });
 
     it("should return error when clinic with such id not found", async () => {
-        const fakeId = new mongoose.Types.ObjectId();
-        const res = await request(app).patch(`/clinics/${fakeId}`).set("Authorization", `Bearer ${token}`).send(mainClinic);
+        const fakeId = new mongoose.Types.ObjectId().toString();
+        const adminToken = await getAdminToken();
+        const res = await updateClinicById(fakeId, mainClinic, adminToken);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Clinic with such id ${fakeId} not found!`);
@@ -229,7 +226,6 @@ describe("PATCH /clinics", () => {
 });
 
 describe("DELETE /clinics", () => {
-    let token: string;
 
     beforeAll(async () => {
         await startServer();
@@ -237,12 +233,6 @@ describe("DELETE /clinics", () => {
 
     beforeEach(async () => {
         await mongoose.connection.dropDatabase();
-        await request(app).post("/auth/sign-up").send(user);
-        const loginRes = await request(app).post("/auth/sign-in").send({
-            email: user.email,
-            password: user.password,
-        });
-        token = loginRes.body.tokens.accessToken;
     });
 
     afterAll(async () => {
@@ -251,15 +241,17 @@ describe("DELETE /clinics", () => {
     });
 
     it("should delete clinic by id", async () => {
-        const createdClinic = await request(app).post("/clinics").set("Authorization", `Bearer ${token}`).send(clinic);
-        const res = await request(app).delete(`/clinics/${createdClinic.body._id}`).set("Authorization", `Bearer ${token}`);
+        const adminToken = await getAdminToken();
+        const createdClinic = await createClinic(clinic, adminToken);
+        const res = await deleteClinicById(createdClinic.body._id, adminToken);
 
         expect(res.statusCode).toBe(204);
     });
 
     it("should return error when clinic with such id not found", async () => {
-        const fakeId = new mongoose.Types.ObjectId();
-        const res = await request(app).delete(`/clinics/${fakeId}`).set("Authorization", `Bearer ${token}`);
+        const fakeId = new mongoose.Types.ObjectId().toString();
+        const adminToken = await getAdminToken();
+        const res = await deleteClinicById(fakeId, adminToken);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Clinic with such id ${fakeId} not found!`);
