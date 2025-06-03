@@ -31,9 +31,10 @@ const getUser = async () => {
 };
 
 const refreshTokens = (refreshToken: string, token: string) => addToken(request(app).post("/auth/refresh"), token).send({ refreshToken });
-const makeRecoveryRequest = (email: string, token: string) => addToken(request(app).post("/auth/recovery"), token).send({ email });
+const makeRecoveryRequest = (email: string) => (request(app).post("/auth/recovery").send({ email }));
 const recoveryPassword = (password: string, token: string) => request(app).post(`/auth/recovery/${token}`).send({ password });
 const me = (token: string) => addToken(request(app).get("/auth/me"), token);
+const activate = (token: string) => request(app).patch(`/auth/activate/${token}`);
 
 describe("POST /auth/sign-up", () => {
     beforeAll(async () => {
@@ -161,8 +162,8 @@ describe("POST /auth/recovery", () => {
     });
 
     it("should send letter to email", async () => {
-        const tokens = await getUserTokens();
-        const res = await makeRecoveryRequest(user.email, tokens.accessToken);
+        await getUserTokens();
+        const res = await makeRecoveryRequest(user.email);
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({
             details: "Check your email",
@@ -206,6 +207,43 @@ describe("POST /auth/recovery/:token", () => {
     });
 });
 
+describe("PATCH /auth/activate/:token", () => {
+    beforeAll(async () => {
+        await startServer();
+    });
+
+    beforeEach(async () => {
+        await mongoose.connection.dropDatabase();
+    });
+
+    afterAll(async () => {
+        await mongoose.connection.dropDatabase();
+        await stopServer();
+    });
+
+    it("should activate account", async () => {
+        const response = await getUser();
+        const token = tokenService.generateActionToken(
+            {
+                userId: response.body.user._id,
+                role: response.body.user.role,
+            },
+            ActionTokenTypeEnum.ACTIVATE,
+        );
+        const res = await activate(token);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual({
+            _id: res.body._id,
+            name: res.body.name,
+            surname: res.body.surname,
+            email: res.body.email,
+            isActive: true,
+            role: "user",
+        });
+    });
+});
+
 describe("GET /auth/me", () => {
     beforeAll(async () => {
         await startServer();
@@ -220,7 +258,7 @@ describe("GET /auth/me", () => {
         await stopServer();
     });
 
-    it("should return user with tokens", async () => {
+    it("should return current authorized user", async () => {
         await getUser();
         const data = await loginUser(user);
         const res = await me(data.body.tokens.accessToken);

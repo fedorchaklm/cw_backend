@@ -204,7 +204,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
             patch: {
                 tags: ["Auth"],
                 summary: "Activate account",
-                security: [{ bearerAuth: [] }],
                 parameters: [
                     {
                         name: "token",
@@ -215,36 +214,18 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 ],
                 responses: {
                     "200": {
-                        description: "Get refresh tokens successfully",
+                        description: "Activate account successfully",
                         content: {
                             "application/json": {
                                 schema: {
                                     type: "object",
                                     properties: {
-                                        user: {
-                                            type: "object",
-                                            properties: {
-                                                email: { type: "string" },
-                                                role: { type: "string" },
-                                                name: { type: "string" },
-                                                surname: { type: "string" },
-                                                isActive: { type: "boolean" },
-                                                isDeleted: { type: "boolean" },
-                                                isVerified: { type: "boolean" },
-                                                _id: { type: "string" },
-                                                createdAt: { type: "string" },
-                                                updatedAt: { type: "string" },
-                                            },
-                                        },
-                                        tokens: {
-                                            type: "object",
-                                            properties: {
-                                                accessToken: { type: "string" },
-                                                refreshToken: {
-                                                    type: "string",
-                                                },
-                                            },
-                                        },
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                        surname: { type: "string" },
+                                        email: { type: "string" },
+                                        role: { type: "string" },
+                                        isActive: { type: "boolean" },
                                     },
                                 },
                             },
@@ -373,7 +354,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
         "/auth/recovery": {
             post: {
                 tags: ["Auth"],
-                summary: "Recovery request",
                 security: [{ bearerAuth: [] }],
                 requestBody: {
                     required: true,
@@ -426,8 +406,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
         "/auth/recovery/{token}": {
             post: {
                 tags: ["Auth"],
-                summary: "Recovery password",
-                security: [{ bearerAuth: [] }],
                 parameters: [
                     {
                         name: "token",
