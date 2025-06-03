@@ -47,7 +47,6 @@ const getAdminToken = async () => {
         email: admin.email,
         password: admin.password,
     });
-    console.log({ admin: res.body });
     return res.body.tokens.accessToken;
 };
 
@@ -152,7 +151,7 @@ describe("GET /clinics", () => {
     });
 });
 
-describe("GET by id /clinics", () => {
+describe("GET by id /clinics/:id", () => {
 
     beforeAll(async () => {
         await startServer();
@@ -190,7 +189,7 @@ describe("GET by id /clinics", () => {
     });
 });
 
-describe("PATCH by id /clinics", () => {
+describe("PATCH by id /clinics/:id", () => {
 
     beforeAll(async () => {
         await startServer();
@@ -238,7 +237,7 @@ describe("PATCH by id /clinics", () => {
     });
 });
 
-describe("DELETE /clinics", () => {
+describe("DELETE by id /clinics/:id", () => {
 
     beforeAll(async () => {
         await startServer();

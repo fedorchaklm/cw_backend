@@ -147,7 +147,7 @@ describe("GET all /procedures", () => {
     });
 });
 
-describe("GET by id /procedures", () => {
+describe("GET by id /procedures/:id", () => {
 
     beforeAll(async () => {
         await startServer();
@@ -184,7 +184,7 @@ describe("GET by id /procedures", () => {
     });
 });
 
-describe("PATCH update by id /procedures", () => {
+describe("PATCH update by id /procedures/:id", () => {
 
     beforeAll(async () => {
         await startServer();
@@ -203,7 +203,7 @@ describe("PATCH update by id /procedures", () => {
         const adminToken = await getAdminToken();
         const createdProcedure = await createProcedure(procedure, adminToken);
         const res = await updateProcedureById(createdProcedure.body._id, { name: procedureMain.name }, adminToken);
-        console.log({ res: res.body });
+
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(expect.objectContaining({
             _id: createdProcedure.body._id,
@@ -231,7 +231,7 @@ describe("PATCH update by id /procedures", () => {
     });
 });
 
-describe("DELETE by id /procedures", () => {
+describe("DELETE by id /procedures/:id", () => {
 
     beforeAll(async () => {
         await startServer();

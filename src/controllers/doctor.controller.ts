@@ -67,7 +67,6 @@ class DoctorController {
         try {
             const { id } = req.params;
             const doctor = req.body as IDoctorUpdateDTO;
-            console.log(">", { id, doctor });
             const updatedDoctor = await doctorService.updateById(id, doctor);
             res.status(StatusCodesEnum.OK).json(updatedDoctor);
         } catch (e) {

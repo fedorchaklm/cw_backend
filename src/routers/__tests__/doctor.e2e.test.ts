@@ -169,7 +169,7 @@ describe("GET all /doctors", () => {
     });
 });
 
-describe("GET by id /doctors", () => {
+describe("GET by id /doctors/:id", () => {
 
     beforeAll(async () => {
         await startServer();
@@ -215,7 +215,7 @@ describe("GET by id /doctors", () => {
     });
 });
 
-describe("PATCH by id /doctors", () => {
+describe("PATCH by id /doctors/:id", () => {
 
     beforeAll(async () => {
         await startServer();
@@ -266,7 +266,7 @@ describe("PATCH by id /doctors", () => {
     });
 });
 
-describe("DELETE by id /doctors", () => {
+describe("DELETE by id /doctors/:id", () => {
 
     beforeAll(async () => {
         await startServer();

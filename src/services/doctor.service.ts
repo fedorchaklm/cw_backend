@@ -42,17 +42,14 @@ class DoctorService {
         doctorId: string,
         doctor: Partial<IDoctor>,
     ): Promise<IDoctor> {
-        console.log("> updateById", { doctorId, doctor });
         const existedDoctor = await doctorRepository.getById(doctorId);
 
-        console.log(">", { existedDoctor });
         if (existedDoctor === null) {
             throw new ApiError(
                 `Doctor with such id ${doctorId} not found!`,
                 StatusCodesEnum.NOT_FOUND,
             );
         }
-        console.log(">", { doctorId, doctor });
 
         return await doctorRepository.updateById(doctorId, doctor);
     }
