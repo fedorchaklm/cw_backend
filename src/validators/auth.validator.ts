@@ -3,7 +3,7 @@ import Joi from "joi";
 import { RegexEnum } from "../enums/regex.enum";
 
 export class AuthValidator {
-    private static refreshToken = Joi.string().required();
+    private static refreshToken = Joi.string();
     private static password = Joi.string().regex(RegexEnum.PASSWORD);
 
     public static refresh = Joi.object({
