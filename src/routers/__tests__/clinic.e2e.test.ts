@@ -18,6 +18,7 @@ const admin = {
     name: "admin",
     surname: "Admin",
     password: "P@ssword123",
+    isActive: "true",
     role: RoleEnum.ADMIN,
 };
 
@@ -46,11 +47,13 @@ const getAdminToken = async () => {
         email: admin.email,
         password: admin.password,
     });
+    console.log({ admin: res.body });
     return res.body.tokens.accessToken;
 };
 
 const getUserToken = async () => {
-    await request(app).post("/auth/sign-up").send(user);
+    const registerUser = await request(app).post("/auth/sign-up").send(user);
+    await User.findByIdAndUpdate(registerUser.body.user._id, { isActive: true });
     const loginRes = await request(app).post("/auth/sign-in").send({
         email: user.email,
         password: user.password,
