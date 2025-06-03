@@ -231,7 +231,6 @@ describe("PATCH by id /doctors", () => {
     it("should update doctor by id", async () => {
         const adminToken = await getAdminToken();
         const createdDoctor = await createDoctor(doctor, adminToken);
-        console.log({ createdDoctor: createdDoctor.body.lastName });
         const res = await updateDoctorById(createdDoctor.body._id, { firstName: doctorDen.firstName }, adminToken);
 
         expect(res.statusCode).toBe(200);
@@ -252,6 +251,16 @@ describe("PATCH by id /doctors", () => {
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Doctor with such id ${fakeId} not found!`);
+    });
+
+    it("should return error not permitted", async () => {
+        const adminToken = await getAdminToken();
+        const createdDoctor = await createDoctor(doctor, adminToken);
+        const userToken = await getUserToken();
+        const res = await updateDoctorById(createdDoctor.body._id, { firstName: doctorDen.firstName }, userToken);
+
+        expect(res.statusCode).toEqual(403);
+        expect(res.body.message).toBe("No has permissions");
     });
 });
 
@@ -285,5 +294,15 @@ describe("DELETE by id /doctors", () => {
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Doctor with such id ${fakeId} not found!`);
+    });
+
+    it("should return error not permitted", async () => {
+        const adminToken = await getAdminToken();
+        const createdDoctor = await createDoctor(doctor, adminToken);
+        const userToken = await getUserToken();
+        const res = await deleteDoctorById(createdDoctor.body._id, userToken);
+
+        expect(res.statusCode).toEqual(403);
+        expect(res.body.message).toBe("No has permissions");
     });
 });

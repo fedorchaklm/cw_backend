@@ -223,6 +223,16 @@ describe("PATCH by id /clinics", () => {
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Clinic with such id ${fakeId} not found!`);
     });
+
+    it("should return error not permitted", async () => {
+        const adminToken = await getAdminToken();
+        const createdClinic = await createClinic(clinic, adminToken);
+        const userToken = await getUserToken();
+        const res = await updateClinicById(createdClinic.body._id, { name: mainClinic.name }, userToken);
+
+        expect(res.statusCode).toEqual(403);
+        expect(res.body.message).toBe("No has permissions");
+    });
 });
 
 describe("DELETE /clinics", () => {
@@ -255,5 +265,15 @@ describe("DELETE /clinics", () => {
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Clinic with such id ${fakeId} not found!`);
+    });
+
+    it("should return error not permitted", async () => {
+        const adminToken = await getAdminToken();
+        const createdClinic = await createClinic(clinic, adminToken);
+        const userToken = await getUserToken();
+        const res = await deleteClinicById(createdClinic.body._id, userToken);
+
+        expect(res.statusCode).toEqual(403);
+        expect(res.body.message).toBe("No has permissions");
     });
 });
