@@ -43,6 +43,7 @@ const doctorDen: IDoctorCreateDTO = {
 };
 
 const addToken = (req, token: string) => req.set("Authorization", `Bearer ${token}`);
+
 const getAdminToken = async () => {
     await User.create({
         ...admin,
@@ -54,6 +55,7 @@ const getAdminToken = async () => {
     });
     return res.body.tokens.accessToken;
 };
+
 const getUserToken = async () => {
     await request(app).post("/auth/sign-up").send(user);
     const loginRes = await request(app).post("/auth/sign-in").send({
@@ -66,8 +68,8 @@ const getUserToken = async () => {
 const createDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
 const createProcedure = (procedure: IProcedureCreateDTO, adminToken: string) => addToken(request(app).post("/procedures"), adminToken).send(procedure);
 const getDoctors = (token: string) => addToken(request(app).get("/doctors"), token);
-const updateDoctor = (id: string, doctor: IDoctorUpdateDTO, adminToken: string) => addToken(request(app).patch(`/doctors/${id}`), adminToken).send(doctor);
 const getDoctorById = (id: string, token: string) => addToken(request(app).get(`/doctors/${id}`).set("Authorization", `Bearer ${token}`), token);
+const updateDoctorById = (id: string, doctor: IDoctorUpdateDTO, adminToken: string) => addToken(request(app).patch(`/doctors/${id}`), adminToken).send(doctor);
 const deleteDoctorById = (id: string, token: string) => addToken(request(app).delete(`/doctors/${id}`).set("Authorization", `Bearer ${token}`), token);
 
 describe("POST /doctors", () => {
@@ -138,7 +140,7 @@ describe("GET all /doctors", () => {
         const createdDoctor = await createDoctor(doctor, adminToken);
         const createdDoctorDen = await createDoctor(doctorDen, adminToken);
         const createdProcedure = await createProcedure(procedure, adminToken);
-        await updateDoctor(createdDoctor.body._id, { procedures: [createdProcedure.body._id] }, adminToken);
+        await updateDoctorById(createdDoctor.body._id, { procedures: [createdProcedure.body._id] }, adminToken);
         const res = await getDoctors(adminToken);
         expect(res.statusCode).toEqual(200);
         expect(res.body.data).toEqual([
@@ -184,7 +186,7 @@ describe("GET by id /doctors", () => {
         const adminToken = await getAdminToken();
         const createdDoctor = await createDoctor(doctor, adminToken);
         const createdProcedure = await createProcedure(procedure, adminToken);
-        await updateDoctor(createdDoctor.body._id, { procedures: [createdProcedure.body._id] }, adminToken);
+        await updateDoctorById(createdDoctor.body._id, { procedures: [createdProcedure.body._id] }, adminToken);
         const res = await getDoctorById(createdDoctor.body._id, adminToken);
 
         expect(res.statusCode).toBe(200);
@@ -230,7 +232,7 @@ describe("PATCH by id /doctors", () => {
         const adminToken = await getAdminToken();
         const createdDoctor = await createDoctor(doctor, adminToken);
         console.log({ createdDoctor: createdDoctor.body.lastName });
-        const res = await updateDoctor(createdDoctor.body._id, { firstName: doctorDen.firstName }, adminToken);
+        const res = await updateDoctorById(createdDoctor.body._id, { firstName: doctorDen.firstName }, adminToken);
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({
@@ -246,7 +248,7 @@ describe("PATCH by id /doctors", () => {
     it("should return error when doctor with such id not found", async () => {
         const fakeId = new mongoose.Types.ObjectId().toString();
         const adminToken = await getAdminToken();
-        const res = await updateDoctor(fakeId, doctor, adminToken);
+        const res = await updateDoctorById(fakeId, doctor, adminToken);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.message).toBe(`Doctor with such id ${fakeId} not found!`);
