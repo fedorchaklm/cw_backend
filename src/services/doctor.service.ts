@@ -5,14 +5,12 @@ import {
     IDoctorCreateDTO,
     IDoctorQuery,
 } from "../interfaces/doctor.interface";
-import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
+// import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
 import { doctorRepository } from "../repositories/doctor.repository";
 
 class DoctorService {
-    public getAll = async (
-        query: IDoctorQuery,
-    ): Promise<IPaginatedResponse<IDoctor>> => {
-        const [data, totalItems] = await doctorRepository.getAll(query);
+    public getAll = async (query: IDoctorQuery) => {
+        const { totalItems, data } = await doctorRepository.getAll(query);
         const totalPages = Math.ceil(totalItems / query.pageSize);
         return {
             totalItems,

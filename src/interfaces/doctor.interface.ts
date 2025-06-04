@@ -1,4 +1,4 @@
-import { QueryOrderEnum } from "../enums/query-order.enum";
+import { OrderByEnum } from "../enums/query-order.enum";
 import { IBase } from "./base.interface";
 
 export interface IDoctor extends IBase {
@@ -21,7 +21,7 @@ export interface IDoctorQuery {
     lastName?: string;
     email?: string;
     phone?: string;
-    orderBy?: QueryOrderEnum;
+    orderBy?: OrderByEnum;
 }
 
 export type IDoctorCreateDTO = Omit<IDoctor, "_id" | "createdAt" | "updatedAt">;

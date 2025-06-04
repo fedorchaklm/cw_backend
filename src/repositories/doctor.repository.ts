@@ -8,9 +8,7 @@ import {
 import { Doctor } from "../models/doctor.model";
 
 class DoctorRepository {
-    public getAll = (
-        query: IDoctorQuery,
-    ): Promise<[Array<IDoctor>, number]> => {
+    public getAll = async (query: IDoctorQuery) => {
         const filterObject: FilterQuery<IDoctor> = {};
         const skip = query.pageSize * (query.page - 1);
 
@@ -27,15 +25,59 @@ class DoctorRepository {
             filterObject.phone = { $regex: query.phone, $options: "i" };
         }
 
-        return Promise.all([
-            Doctor.find(filterObject)
-                .limit(query.pageSize)
-                .skip(skip)
-                .sort(query.orderBy)
-                // .populate("clinics")
-                .populate("procedures"),
-            Doctor.find(filterObject).countDocuments(),
+        const res = await Doctor.aggregate([
+            {
+                $match: filterObject,
+            },
+            { $skip: skip },
+            { $limit: query.pageSize },
+            {
+                $sort: { [query.orderBy]: 1 },
+            },
+            {
+                $lookup: {
+                    from: "clinics",
+                    let: { doctorId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $in: ["$$doctorId", "$doctors"] },
+                            },
+                        },
+                        {
+                            $project: { name: 1 },
+                        },
+                    ],
+                    as: "clinics",
+                },
+            },
+            {
+                $lookup: {
+                    from: "procedures",
+                    localField: "procedures",
+                    foreignField: "_id",
+                    as: "procedures",
+                    pipeline: [{ $project: { name: 1 } }],
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalItems: { $sum: 1 },
+                    data: { $push: "$$ROOT" },
+                },
+            },
+            {
+                $project: { _id: 0 },
+            },
         ]);
+
+        return res.length === 0
+            ? {
+                  totalItems: 0,
+                  data: [],
+              }
+            : res[0];
     };
 
     public getById(id: string): Promise<IDoctor> {

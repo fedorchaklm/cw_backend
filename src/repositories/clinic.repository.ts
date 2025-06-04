@@ -1,6 +1,6 @@
 import { FilterQuery } from "mongoose";
 
-import { QueryOrderEnum } from "../enums/query-order.enum";
+import { OrderByEnum } from "../enums/query-order.enum";
 import {
     IClinic,
     IClinicCreateDTO,
@@ -44,7 +44,7 @@ class ClinicRepository {
             Clinic.find(filterObject)
                 .limit(query.pageSize)
                 .skip(skip)
-                .sort(QueryOrderEnum.NAME)
+                .sort(OrderByEnum.NAME)
                 .populate({
                     path: "doctors",
                     populate: {
