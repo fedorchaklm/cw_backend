@@ -53,11 +53,7 @@ class ClinicController {
                     StatusCodesEnum.BAD_REQUEST,
                 );
             }
-            const data = await clinicService.create({
-                ...clinic,
-                doctors: [],
-                procedures: [],
-            });
+            const data = await clinicService.create(clinic);
             res.status(StatusCodesEnum.CREATED).json(data);
         } catch (e) {
             next(e);

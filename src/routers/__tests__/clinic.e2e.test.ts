@@ -61,7 +61,7 @@ const getUserToken = async () => {
 };
 
 const createClinic = (clinic: IClinicCreateDTO, adminToken: string) => addToken(request(app).post("/clinics"), adminToken).send(clinic);
-// const createDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
+// const createteDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
 // const createProcedure = (procedure: IProcedureCreateDTO, adminToken: string) => addToken(request(app).post("/procedures"), adminToken).send(procedure);
 const getClinics = (token: string) => addToken(request(app).get("/clinics"), token);
 const getClinicById = (id: string, token: string) => addToken(request(app).get(`/clinics/${id}`).set("Authorization", `Bearer ${token}`), token);
@@ -113,7 +113,7 @@ describe("POST /clinics", () => {
     });
 });
 
-describe("GET /clinics", () => {
+describe("GET all /clinics", () => {
 
     beforeAll(async () => {
         await startServer();

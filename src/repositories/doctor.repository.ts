@@ -25,6 +25,18 @@ class DoctorRepository {
             filterObject.phone = { $regex: query.phone, $options: "i" };
         }
 
+        const orderObject: { [key: string]: 1 | -1 } = {};
+
+        if (query.orderBy) {
+            if (query.orderBy.startsWith("-")) {
+                orderObject[query.orderBy.slice(1)] = -1;
+            } else {
+                orderObject[query.orderBy] = 1;
+            }
+        } else {
+            orderObject.firstName = 1;
+        }
+
         const res = await Doctor.aggregate([
             {
                 $match: filterObject,
@@ -32,7 +44,7 @@ class DoctorRepository {
             { $skip: skip },
             { $limit: query.pageSize },
             {
-                $sort: { [query.orderBy]: 1 },
+                $sort: orderObject,
             },
             {
                 $lookup: {
