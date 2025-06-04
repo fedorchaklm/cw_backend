@@ -19,27 +19,24 @@ class ClinicRepository {
         if (query.name) {
             filterObject.name = { $regex: query.name, $options: "i" };
         }
+
         if (query.procedures) {
-            // filterObject.procedures = {
-            //     $regex: query.procedures,
-            //     $options: "i",
-            // };
             const procedures = await Procedure.find({
                 name: { $regex: query.procedures, $options: "i" },
             }).select("_id");
 
-            filterObject.procedures = {
-                $in: procedures.map((procedure) => procedure._id),
+            filterObject["doctors.procedures"] = {
+                $in: procedures.map((p) => p._id),
             };
         }
+
         if (query.doctors) {
-            // filterObject.doctors = { $regex: query.doctors, $options: "i" };
             const doctors = await Doctor.find({
                 name: { $regex: query.doctors, $options: "i" },
             }).select("_id");
 
             filterObject.doctors = {
-                $in: doctors.map((doctor) => doctor._id),
+                $in: doctors.map((d) => d._id),
             };
         }
 
@@ -48,8 +45,12 @@ class ClinicRepository {
                 .limit(query.pageSize)
                 .skip(skip)
                 .sort(QueryOrderEnum.NAME)
-                .populate("doctors"),
-            // .populate("procedures"),
+                .populate({
+                    path: "doctors",
+                    populate: {
+                        path: "procedures",
+                    },
+                }),
             Clinic.find(filterObject).countDocuments(),
         ]);
     };

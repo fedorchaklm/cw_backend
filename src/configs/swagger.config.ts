@@ -19,19 +19,19 @@ export const swaggerDocument: OpenAPIV3.Document = {
             description: "Authentication endpoints",
         },
         {
-            name: "User",
+            name: "Users",
             description: "User endpoints",
         },
         {
-            name: "Clinic",
+            name: "Clinics",
             description: "Clinic endpoints",
         },
         {
-            name: "Doctor",
+            name: "Doctors",
             description: "Doctor endpoints",
         },
         {
-            name: "Procedure",
+            name: "Procedures",
             description: "Procedure endpoints",
         },
     ],
@@ -347,7 +347,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
         "/auth/recovery": {
             post: {
                 tags: ["Auth"],
-                security: [{ bearerAuth: [] }],
                 requestBody: {
                     required: true,
                     content: {
@@ -462,7 +461,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/clinics": {
             get: {
-                tags: ["Clinic"],
+                tags: ["Clinics"],
                 summary: "Get clinics with pagination and filter",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -574,7 +573,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/clinics/{id}": {
             get: {
-                tags: ["Clinic"],
+                tags: ["Clinics"],
                 summary: "Get clinic by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -678,7 +677,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/clinics/post": {
             post: {
-                tags: ["Clinic"],
+                tags: ["Clinics"],
                 summary: "Create clinic",
                 requestBody: {
                     required: true,
@@ -793,7 +792,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/clinics/{id}/update": {
             patch: {
-                tags: ["Clinic"],
+                tags: ["Clinics"],
                 summary: "Update clinic by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -916,7 +915,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/clinics/{id}/delete": {
             delete: {
-                tags: ["Clinic"],
+                tags: ["Clinics"],
                 summary: "Delete clinic by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -953,7 +952,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/doctors": {
             get: {
-                tags: ["Doctor"],
+                tags: ["Doctors"],
                 summary: "Get doctors with pagination and filter",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1054,7 +1053,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/doctors/{id}": {
             get: {
-                tags: ["Doctor"],
+                tags: ["Doctors"],
                 summary: "Get doctor by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1129,7 +1128,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/doctors/post": {
             post: {
-                tags: ["Doctor"],
+                tags: ["Doctors"],
                 summary: "Create doctor",
                 requestBody: {
                     required: true,
@@ -1224,7 +1223,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/doctors/{id}/update": {
             patch: {
-                tags: ["Doctor"],
+                tags: ["Doctors"],
                 summary: "Get doctor by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1319,9 +1318,9 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
-        "/doctors/{id}/delete": {
+        "/doctors/{id}/deletes": {
             delete: {
-                tags: ["Doctor"],
+                tags: ["Doctors"],
                 summary: "Delete doctor  by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1358,7 +1357,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/procedures": {
             get: {
-                tags: ["Procedure"],
+                tags: ["Procedures"],
                 summary: "Get procedures with pagination and filter",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1414,7 +1413,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/procedures/{id}": {
             get: {
-                tags: ["Procedure"],
+                tags: ["Procedures"],
                 summary: "Get procedure by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1462,7 +1461,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/procedures/post": {
             post: {
-                tags: ["Procedure"],
+                tags: ["Procedures"],
                 summary: "Create procedure",
                 requestBody: {
                     required: true,
@@ -1515,7 +1514,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/procedures/{id}/update": {
             patch: {
-                tags: ["Procedure"],
+                tags: ["Procedures"],
                 summary: "Get procedure by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1576,7 +1575,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/procedures/{id}/delete": {
             delete: {
-                tags: ["Procedure"],
+                tags: ["Procedures"],
                 summary: "Delete procedure by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
@@ -1613,7 +1612,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/users": {
             get: {
-                tags: ["User"],
+                tags: ["Users"],
                 summary: "Get all users",
                 security: [{ bearerAuth: [] }],
                 responses: {
@@ -1645,7 +1644,7 @@ export const swaggerDocument: OpenAPIV3.Document = {
         },
         "/users/{id}": {
             get: {
-                tags: ["User"],
+                tags: ["Users"],
                 summary: "Get user by id",
                 security: [{ bearerAuth: [] }],
                 parameters: [
