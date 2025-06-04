@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+import { OrderByEnum } from "../enums/query-order.enum";
 import { RegexEnum } from "../enums/regex.enum";
 
 export class ClinicValidator {
@@ -37,9 +38,9 @@ export class ClinicValidator {
         name: Joi.string().trim(),
         procedures: Joi.string().trim(),
         doctors: Joi.string().trim(),
-        // order: Joi.string().valid(
-        //     ...Object.values(ProcedureQueryOrderEnum),
-        //     ...Object.values(ProcedureQueryOrderEnum).map((item) => `-${item}`),
-        // ),
+        order: Joi.string().valid(
+            ...Object.values(OrderByEnum),
+            ...Object.values(OrderByEnum).map((item) => `-${item}`),
+        ),
     });
 }

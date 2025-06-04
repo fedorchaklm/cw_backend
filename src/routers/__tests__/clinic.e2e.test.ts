@@ -5,6 +5,7 @@ import { User } from "../../models/user.model";
 import bcrypt from "bcrypt";
 import { IClinicCreateDTO, IClinicUpdateDTO } from "../../interfaces/clinic.interface";
 import { RoleEnum } from "../../enums/role.enum";
+import { IDoctorCreateDTO } from "../../interfaces/doctor.interface";
 
 const user = {
     email: "sun.jones.2@gmail.com",
@@ -36,6 +37,14 @@ const mainClinic = {
 //     name: "some procedure",
 // };
 
+const doctor: IDoctorCreateDTO = {
+    firstName: "Doctor",
+    lastName: "Smith",
+    email: "hgsjdh@gmail.com",
+    phone: "0661245782",
+    procedures: [],
+};
+
 const addToken = (req, token: string) => req.set("Authorization", `Bearer ${token}`);
 
 const getAdminToken = async () => {
@@ -61,12 +70,13 @@ const getUserToken = async () => {
 };
 
 const createClinic = (clinic: IClinicCreateDTO, adminToken: string) => addToken(request(app).post("/clinics"), adminToken).send(clinic);
-// const createteDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
+const createteDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
 // const createProcedure = (procedure: IProcedureCreateDTO, adminToken: string) => addToken(request(app).post("/procedures"), adminToken).send(procedure);
 const getClinics = (token: string) => addToken(request(app).get("/clinics"), token);
 const getClinicById = (id: string, token: string) => addToken(request(app).get(`/clinics/${id}`).set("Authorization", `Bearer ${token}`), token);
 const updateClinicById = (id: string, clinic: IClinicUpdateDTO, adminToken: string) => addToken(request(app).patch(`/clinics/${id}`), adminToken).send(clinic);
 const deleteClinicById = (id: string, token: string) => addToken(request(app).delete(`/clinics/${id}`).set("Authorization", `Bearer ${token}`), token);
+const deleteDoctorById = (id: string, token: string) => addToken(request(app).delete(`/doctors/${id}`).set("Authorization", `Bearer ${token}`), token);
 
 describe("POST /clinics", () => {
 
@@ -142,6 +152,23 @@ describe("GET all /clinics", () => {
                 doctors: [],
                 _id: createdMainClinic.body._id,
             },
+            {
+                name: clinic.name,
+                doctors: [],
+                _id: createdClinic.body._id,
+            },
+        ]);
+    });
+
+    it("should return clinic after deleting doctor", async () => {
+        const adminToken = await getAdminToken();
+        const createdDoctor = await createteDoctor(doctor, adminToken);
+        const createdClinic = await createClinic({ ...clinic, doctors: [createdDoctor.body._id] }, adminToken);
+        await deleteDoctorById(createdDoctor.body._id, adminToken);
+        const res = await getClinics(adminToken);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.data).toEqual([
             {
                 name: clinic.name,
                 doctors: [],
