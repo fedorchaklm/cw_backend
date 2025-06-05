@@ -1,6 +1,4 @@
-import { OpenAPIV3 } from "openapi-types";
-
-export const swaggerDocument: OpenAPIV3.Document = {
+export const swaggerDocument = {
     openapi: "3.0.0",
     info: {
         title: "Clinic API Documentation",

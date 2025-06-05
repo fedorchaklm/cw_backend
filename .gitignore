@@ -5,4 +5,8 @@ node_modules
 
 /dist/
 .env
+.env.production
+.env.test
+.env.dev
 
+mongo_db/

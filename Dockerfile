@@ -1,10 +1,18 @@
-FROM node:24-alpine
+FROM node:20-alpine
 
-MAINTAINER Dev
-
-RUN mkdir /app
 WORKDIR /app
 
-COPY ./backend/package.json .
+# Копіюємо тільки package.json спочатку — для кешу
+COPY package*.json ./
 
-RUN npm i
+# Встановлюємо всі залежності (включно з dev)
+RUN npm install
+
+# Тепер копіюємо решту коду
+COPY . .
+
+# Виставляємо порт (не обов’язково, але добре мати)
+EXPOSE 5000
+
+# Стартова команда
+CMD ["npm", "start"]

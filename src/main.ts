@@ -1,6 +1,4 @@
 /*eslint-disable no-console */
-/*eslint-disable @typescript-eslint/no-unused-vars*/
-
 import express, { NextFunction, Request, Response } from "express";
 import { Server } from "http";
 import mongoose from "mongoose";
@@ -34,7 +32,7 @@ process.on("uncaughtException", (err) => {
 
 const dbConnection = async () => {
     try {
-        console.log("Connecting to DB...");
+        console.log("Connecting to DB...", config.MONGO_URI, config.ENV);
         await mongoose.connect(config.MONGO_URI);
         console.log("MongoDB connected successfully");
     } catch (e) {
