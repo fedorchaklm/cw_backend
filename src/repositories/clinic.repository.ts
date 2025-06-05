@@ -11,20 +11,19 @@ class ClinicRepository {
     public getAll = async (query: IClinicQuery) => {
         const filterObject: FilterQuery<IClinic> = {};
         const skip = query.pageSize * (query.page - 1);
+
         if (query.name) {
             filterObject.name = { $regex: query.name, $options: "i" };
         }
 
         const orderObject: { [key: string]: 1 | -1 } = {};
 
-        if (query.orderBy) {
-            if (query.orderBy.startsWith("-")) {
-                orderObject[query.orderBy.slice(1)] = -1;
-            } else {
-                orderObject[query.orderBy] = 1;
-            }
+        if (query.orderBy === "name") {
+            orderObject.name = 1;
+        } else if (query.orderBy === "-name") {
+            orderObject.name = -1;
         } else {
-            orderObject.firstName = 1;
+            orderObject.name = 1;
         }
 
         console.log(">query", query);
@@ -66,6 +65,7 @@ class ClinicRepository {
                     localField: "procedureIds",
                     foreignField: "_id",
                     as: "procedures",
+                    pipeline: [{ $project: { createdAt: 0, updatedAt: 0 } }],
                 },
             },
             // filter by doctor first
@@ -118,18 +118,16 @@ class ClinicRepository {
             { $skip: skip },
             { $limit: query.pageSize },
             {
+                $project: { doctors: 0, procedureIds: 0 },
+            },
+            {
                 $group: {
                     _id: null,
                     totalItems: { $sum: 1 },
                     data: { $push: "$$ROOT" },
                 },
             },
-            {
-                $project: { procedureIds: 0 },
-            },
         ]);
-
-        // return res;
 
         return res.length === 0
             ? {
