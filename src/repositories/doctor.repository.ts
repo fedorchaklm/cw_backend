@@ -128,10 +128,10 @@ class DoctorRepository {
         return res[0];
     }
 
-    public create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
-        // const createdDoctor = await Doctor.create(doctor);
+    public async create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
+        const createdDoctor = await Doctor.create(doctor);
         // return createdDoctor.toObject();
-        return Doctor.create(doctor);
+        return await this.getById(createdDoctor._id);
     }
 
     public async updateById(

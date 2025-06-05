@@ -108,6 +108,9 @@ describe("POST /doctors", () => {
             email: doctor.email,
             phone: doctor.phone,
             procedures: [],
+            clinics: [],
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String)
         });
     });
 

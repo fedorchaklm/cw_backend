@@ -25,7 +25,6 @@ class DoctorService {
 
     public async getById(id: string): Promise<any> {
         const doctor = await doctorRepository.getById(id);
-        console.log({ doctor });
         if (!doctor) {
             throw new ApiError(
                 `Doctor with such id ${id} not found!`,
@@ -44,7 +43,6 @@ class DoctorService {
         doctor: Partial<IDoctor>,
     ): Promise<IDoctor> {
         const existedDoctor = await doctorRepository.getById(doctorId);
-        console.log({ existedDoctor });
         if (!existedDoctor) {
             throw new ApiError(
                 `Doctor with such id ${doctorId} not found!`,

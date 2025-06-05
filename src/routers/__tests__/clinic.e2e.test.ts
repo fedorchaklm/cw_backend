@@ -101,7 +101,9 @@ describe("POST /clinics", () => {
         expect(res.body).toEqual(expect.objectContaining({
             _id: expect.any(String),
             name: clinic.name,
-            doctors: [],
+            procedures: [],
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
         }));
     });
 

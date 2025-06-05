@@ -182,7 +182,7 @@ class ClinicRepository {
                 $project: { doctors: 0, procedureIds: 0 },
             },
         ]);
-        console.log({ res: res[0] });
+
         return res[0];
     }
 
@@ -190,8 +190,9 @@ class ClinicRepository {
         return Clinic.findOne({ name });
     }
 
-    public create(clinic: IClinicCreateDTO): Promise<any> {
-        return Clinic.create(clinic);
+    public async create(clinic: IClinicCreateDTO): Promise<IClinic> {
+        const createdClinic = await Clinic.create(clinic);
+        return await this.getById(createdClinic._id.toString());
     }
 
     public async updateById(
