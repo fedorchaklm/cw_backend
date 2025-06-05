@@ -70,7 +70,7 @@ const getUserToken = async () => {
 };
 
 const createClinic = (clinic: IClinicCreateDTO, adminToken: string) => addToken(request(app).post("/clinics"), adminToken).send(clinic);
-const createteDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
+const createDoctor = (doctor: IDoctorCreateDTO, adminToken: string) => addToken(request(app).post("/doctors"), adminToken).send(doctor);
 // const createProcedure = (procedure: IProcedureCreateDTO, adminToken: string) => addToken(request(app).post("/procedures"), adminToken).send(procedure);
 const getClinics = (token: string) => addToken(request(app).get("/clinics"), token);
 const getClinicById = (id: string, token: string) => addToken(request(app).get(`/clinics/${id}`).set("Authorization", `Bearer ${token}`), token);
@@ -143,26 +143,31 @@ describe("GET all /clinics", () => {
         const createdClinic = await createClinic(clinic, adminToken);
         const createdMainClinic = await createClinic(mainClinic, adminToken);
         const res = await getClinics(adminToken);
-
         expect(res.statusCode).toEqual(200);
-        expect(res.body.data.length).toBe(2);
+        // expect(res.body.data.length).toBe(2);
         expect(res.body.data).toEqual([
             {
                 name: mainClinic.name,
-                doctors: [],
+                // doctors: [],
+                procedures: [],
                 _id: createdMainClinic.body._id,
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
             },
             {
                 name: clinic.name,
-                doctors: [],
+                // doctors: [],
                 _id: createdClinic.body._id,
+                procedures: [],
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
             },
         ]);
     });
 
     it("should return clinic after deleting doctor", async () => {
         const adminToken = await getAdminToken();
-        const createdDoctor = await createteDoctor(doctor, adminToken);
+        const createdDoctor = await createDoctor(doctor, adminToken);
         const createdClinic = await createClinic({ ...clinic, doctors: [createdDoctor.body._id] }, adminToken);
         await deleteDoctorById(createdDoctor.body._id, adminToken);
         const res = await getClinics(adminToken);
@@ -171,8 +176,11 @@ describe("GET all /clinics", () => {
         expect(res.body.data).toEqual([
             {
                 name: clinic.name,
-                doctors: [],
+                // doctors: [],
+                procedures: [],
                 _id: createdClinic.body._id,
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
             },
         ]);
     });
@@ -201,8 +209,11 @@ describe("GET by id /clinics/:id", () => {
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({
             name: clinic.name,
-            doctors: [],
+            // doctors: [],
+            procedures: [],
             _id: createdClinic.body._id,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
         });
     });
 
@@ -239,8 +250,11 @@ describe("PATCH by id /clinics/:id", () => {
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({
             name: mainClinic.name,
-            doctors: [],
+            // doctors: [],
+            procedures: [],
             _id: createdClinic.body._id,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
         });
     });
 

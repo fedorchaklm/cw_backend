@@ -29,7 +29,7 @@ class ClinicService {
 
     public async getById(id: string): Promise<IClinic> {
         const clinic = await clinicRepository.getById(id);
-        if (clinic === null) {
+        if (!clinic) {
             throw new ApiError(
                 `Clinic with such id ${id} not found!`,
                 StatusCodesEnum.NOT_FOUND,
@@ -51,7 +51,7 @@ class ClinicService {
         clinic: Partial<IClinic>,
     ): Promise<IClinic> {
         const existsClinic = await clinicRepository.getById(clinicId);
-        if (existsClinic === null) {
+        if (!existsClinic) {
             throw new ApiError(
                 `Clinic with such id ${clinicId} not found!`,
                 StatusCodesEnum.NOT_FOUND,
@@ -62,8 +62,8 @@ class ClinicService {
 
     public async deleteById(clinicId: string): Promise<IClinic> {
         const clinic = await clinicRepository.getById(clinicId);
-
-        if (clinic === null) {
+        console.log({ clinic });
+        if (!clinic) {
             throw new ApiError(
                 `Clinic with such id ${clinicId} not found!`,
                 StatusCodesEnum.NOT_FOUND,

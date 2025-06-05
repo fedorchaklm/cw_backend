@@ -93,7 +93,6 @@ class DoctorRepository {
     };
 
     public async getById(id: string) {
-        // return Doctor.findById(id);
         const res = await Doctor.aggregate([
             {
                 $match: { _id: new Types.ObjectId(id) },
@@ -125,7 +124,7 @@ class DoctorRepository {
                 },
             },
         ]);
-        console.log({ res });
+
         return res[0];
     }
 

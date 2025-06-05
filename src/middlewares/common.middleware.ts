@@ -40,6 +40,7 @@ class CommonMiddleware {
         return async (req: Request, _: Response, next: NextFunction) => {
             try {
                 req.query = await validator.validateAsync(req.query);
+                console.log("> req.query", req.query);
                 next();
             } catch (e) {
                 // if (e instanceof Joi.ValidationError) {

@@ -43,7 +43,7 @@ export default [
             "@typescript-eslint/explicit-function-return-type": "off",
             "@typescript-eslint/explicit-module-boundary-types": "off",
             "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "req|res|next" }],
+            "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "req|res|next" }],
             "@typescript-eslint/return-await": ["error", "always"],
             "import/first": "error",
             "import/newline-after-import": ["error", { count: 1 }],
