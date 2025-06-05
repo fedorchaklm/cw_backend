@@ -570,112 +570,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     },
                 },
             },
-        },
-        "/clinics/{id}": {
-            get: {
-                tags: ["Clinics"],
-                summary: "Get clinic by id",
-                security: [{ bearerAuth: [] }],
-                parameters: [
-                    {
-                        name: "id",
-                        in: "path",
-                        description: "Get clinic by id",
-                        schema: { type: "string" },
-                    },
-                ],
-                responses: {
-                    "200": {
-                        description: "Successfully get clinic",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    properties: {
-                                        totalItems: { type: "integer" },
-                                        totalPages: { type: "integer" },
-                                        prevPage: {
-                                            type: "boolean",
-                                            default: false,
-                                        },
-                                        nextPage: {
-                                            type: "boolean",
-                                            default: false,
-                                        },
-                                        data: {
-                                            type: "array",
-                                            items: {
-                                                type: "object",
-                                                properties: {
-                                                    _id: { type: "string" },
-                                                    name: { type: "string" },
-                                                    doctors: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "object",
-                                                            properties: {
-                                                                _id: {
-                                                                    type: "string",
-                                                                },
-                                                                firstName: {
-                                                                    type: "string",
-                                                                },
-                                                                lastName: {
-                                                                    type: "string",
-                                                                },
-                                                                email: {
-                                                                    type: "string",
-                                                                },
-                                                                phone: {
-                                                                    type: "string",
-                                                                },
-                                                                procedures: {
-                                                                    type: "array",
-                                                                    items: {
-                                                                        type: "object",
-                                                                        properties:
-                                                                            {
-                                                                                _id: {
-                                                                                    type: "string",
-                                                                                },
-                                                                                name: {
-                                                                                    type: "string",
-                                                                                },
-                                                                            },
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    "404": {
-                        description: "Not found",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    properties: {
-                                        status: {
-                                            type: "string",
-                                            default: 404,
-                                        },
-                                        message: { type: "string" },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        "/clinics/post": {
             post: {
                 tags: ["Clinics"],
                 summary: "Create clinic",
@@ -790,7 +684,109 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
-        "/clinics/{id}/update": {
+        "/clinics/{id}": {
+            get: {
+                tags: ["Clinics"],
+                summary: "Get clinic by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Get clinic by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Successfully get clinic",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        totalItems: { type: "integer" },
+                                        totalPages: { type: "integer" },
+                                        prevPage: {
+                                            type: "boolean",
+                                            default: false,
+                                        },
+                                        nextPage: {
+                                            type: "boolean",
+                                            default: false,
+                                        },
+                                        data: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: { type: "string" },
+                                                    name: { type: "string" },
+                                                    doctors: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "object",
+                                                            properties: {
+                                                                _id: {
+                                                                    type: "string",
+                                                                },
+                                                                firstName: {
+                                                                    type: "string",
+                                                                },
+                                                                lastName: {
+                                                                    type: "string",
+                                                                },
+                                                                email: {
+                                                                    type: "string",
+                                                                },
+                                                                phone: {
+                                                                    type: "string",
+                                                                },
+                                                                procedures: {
+                                                                    type: "array",
+                                                                    items: {
+                                                                        type: "object",
+                                                                        properties:
+                                                                            {
+                                                                                _id: {
+                                                                                    type: "string",
+                                                                                },
+                                                                                name: {
+                                                                                    type: "string",
+                                                                                },
+                                                                            },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
             patch: {
                 tags: ["Clinics"],
                 summary: "Update clinic by id",
@@ -912,8 +908,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     },
                 },
             },
-        },
-        "/clinics/{id}/delete": {
             delete: {
                 tags: ["Clinics"],
                 summary: "Delete clinic by id",
@@ -1050,83 +1044,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     },
                 },
             },
-        },
-        "/doctors/{id}": {
-            get: {
-                tags: ["Doctors"],
-                summary: "Get doctor by id",
-                security: [{ bearerAuth: [] }],
-                parameters: [
-                    {
-                        name: "id",
-                        in: "path",
-                        description: "Get doctor by id",
-                        schema: { type: "string" },
-                    },
-                ],
-                responses: {
-                    "200": {
-                        description: "Successfully get doctor",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    properties: {
-                                        _id: {
-                                            type: "string",
-                                        },
-                                        firstName: {
-                                            type: "string",
-                                        },
-                                        lastName: {
-                                            type: "string",
-                                        },
-                                        email: {
-                                            type: "string",
-                                        },
-                                        phone: {
-                                            type: "string",
-                                        },
-                                        procedures: {
-                                            type: "array",
-                                            items: {
-                                                type: "object",
-                                                properties: {
-                                                    _id: {
-                                                        type: "string",
-                                                    },
-                                                    name: {
-                                                        type: "string",
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    "404": {
-                        description: "Not found",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    properties: {
-                                        status: {
-                                            type: "string",
-                                            default: 404,
-                                        },
-                                        message: { type: "string" },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        "/doctors/post": {
             post: {
                 tags: ["Doctors"],
                 summary: "Create doctor",
@@ -1221,7 +1138,80 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
-        "/doctors/{id}/update": {
+        "/doctors/{id}": {
+            get: {
+                tags: ["Doctors"],
+                summary: "Get doctor by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Get doctor by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Successfully get doctor",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: {
+                                            type: "string",
+                                        },
+                                        firstName: {
+                                            type: "string",
+                                        },
+                                        lastName: {
+                                            type: "string",
+                                        },
+                                        email: {
+                                            type: "string",
+                                        },
+                                        phone: {
+                                            type: "string",
+                                        },
+                                        procedures: {
+                                            type: "array",
+                                            items: {
+                                                type: "object",
+                                                properties: {
+                                                    _id: {
+                                                        type: "string",
+                                                    },
+                                                    name: {
+                                                        type: "string",
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
             patch: {
                 tags: ["Doctors"],
                 summary: "Get doctor by id",
@@ -1317,8 +1307,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     },
                 },
             },
-        },
-        "/doctors/{id}/deletes": {
             delete: {
                 tags: ["Doctors"],
                 summary: "Delete doctor  by id",
@@ -1410,56 +1398,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     },
                 },
             },
-        },
-        "/procedures/{id}": {
-            get: {
-                tags: ["Procedures"],
-                summary: "Get procedure by id",
-                security: [{ bearerAuth: [] }],
-                parameters: [
-                    {
-                        name: "id",
-                        in: "path",
-                        description: "Get procedure by id",
-                        schema: { type: "string" },
-                    },
-                ],
-                responses: {
-                    "200": {
-                        description: "Successfully get procedure",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    properties: {
-                                        _id: { type: "string" },
-                                        name: { type: "string" },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    "404": {
-                        description: "Not found",
-                        content: {
-                            "application/json": {
-                                schema: {
-                                    type: "object",
-                                    properties: {
-                                        status: {
-                                            type: "string",
-                                            default: 404,
-                                        },
-                                        message: { type: "string" },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        "/procedures/post": {
             post: {
                 tags: ["Procedures"],
                 summary: "Create procedure",
@@ -1512,7 +1450,53 @@ export const swaggerDocument: OpenAPIV3.Document = {
                 },
             },
         },
-        "/procedures/{id}/update": {
+        "/procedures/{id}": {
+            get: {
+                tags: ["Procedures"],
+                summary: "Get procedure by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Get procedure by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "200": {
+                        description: "Successfully get procedure",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
             patch: {
                 tags: ["Procedures"],
                 summary: "Get procedure by id",
@@ -1572,8 +1556,6 @@ export const swaggerDocument: OpenAPIV3.Document = {
                     },
                 },
             },
-        },
-        "/procedures/{id}/delete": {
             delete: {
                 tags: ["Procedures"],
                 summary: "Delete procedure by id",
