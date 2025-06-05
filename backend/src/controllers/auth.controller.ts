@@ -101,7 +101,6 @@ class AuthController {
             const user = await authService.recoveryPassword(token, password);
             res.status(StatusCodesEnum.OK).json(user);
         } catch (e) {
-            console.log(">", e);
             next(e);
         }
     };

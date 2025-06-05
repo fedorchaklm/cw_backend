@@ -9,9 +9,6 @@ export class DoctorValidator {
     private static email = Joi.string().email();
     private static phone = Joi.string().regex(RegexEnum.PHONE);
     private static procedures = Joi.array().items(Joi.string());
-    // private static age = Joi.number().min(18).max(55);
-    // private static experience = Joi.number().min(1);
-    // private static clinics = Joi.array();
 
     public static create = Joi.object({
         firstName: this.name.required(),
@@ -19,9 +16,6 @@ export class DoctorValidator {
         email: this.email.required(),
         phone: this.phone.required(),
         procedures: this.procedures.required(),
-        // age: this.age.required(),
-        // experience: this.experience.required(),
-        // clinics: this.clinics.required(),
     });
 
     public static update = Joi.object({
@@ -30,9 +24,6 @@ export class DoctorValidator {
         email: this.email,
         phone: this.phone,
         procedures: this.procedures,
-        // age: this.age.required(),
-        // experience: this.experience.required(),
-        // clinics: this.clinics.required(),
     });
 
     public static query = Joi.object({

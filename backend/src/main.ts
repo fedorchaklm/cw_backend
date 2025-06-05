@@ -45,7 +45,6 @@ export const disconnectDB = async () => {
     await mongoose.connection.close();
 };
 
-// // start();
 let server: Server;
 
 export const startServer = async () => {

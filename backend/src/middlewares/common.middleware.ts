@@ -29,9 +29,7 @@ class CommonMiddleware {
                 req.body = await validator.validateAsync(req.body);
                 next();
             } catch (e) {
-                // if (e instanceof Joi.ValidationError) {
                 next(new ApiError(e.details[0].message, 400));
-                // }
             }
         };
     }
@@ -42,9 +40,7 @@ class CommonMiddleware {
                 req.query = await validator.validateAsync(req.query);
                 next();
             } catch (e) {
-                // if (e instanceof Joi.ValidationError) {
                 next(new ApiError(e.details[0].message, 400));
-                // }
             }
         };
     }

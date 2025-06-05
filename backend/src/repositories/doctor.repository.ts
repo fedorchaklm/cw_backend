@@ -130,7 +130,6 @@ class DoctorRepository {
 
     public async create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
         const createdDoctor = await Doctor.create(doctor);
-        // return createdDoctor.toObject();
         return await this.getById(createdDoctor._id);
     }
 

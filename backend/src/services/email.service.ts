@@ -37,14 +37,6 @@ class EmailService {
         return layoutTemplate({ body: childHtml });
     };
 
-    // public async sendEmail(): Promise<void> {
-    //     await this.transporter.sendMail({
-    //         to: "fedorchak.luba@gmail.com",
-    //         subject: "Hello",
-    //         text: "Hello from node",
-    //     });
-    // }
-
     public async sendEmail(
         to: string,
         emailData: EmailDataType,

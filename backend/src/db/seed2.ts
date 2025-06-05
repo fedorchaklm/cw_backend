@@ -1,15 +1,15 @@
 /*eslint-disable no-console */
 
-// import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
 import { config } from "../configs/config";
-// import { RoleEnum } from "../enums/role.enum";
+import { RoleEnum } from "../enums/role.enum";
 import { Clinic } from "../models/clinic.model";
 import { Doctor } from "../models/doctor.model";
 import { Procedure } from "../models/procedure.model";
-// import { User } from "../models/user.model";
+import { User } from "../models/user.model";
 
 dotenv.config();
 
@@ -17,52 +17,52 @@ async function seed2() {
     try {
         await mongoose.connect(config.MONGO_URI);
 
-        // await mongoose.connection.db.dropDatabase();
+        await mongoose.connection.db.dropDatabase();
 
-        // const password = await bcrypt.hash("P@ssword123", 10);
+        const password = await bcrypt.hash("P@ssword123", 10);
 
-        // await User.insertMany([
-        //     {
-        //         name: "Admin",
-        //         surname: "Admin",
-        //         email: "admin@gmail.com",
-        //         password,
-        //         isActive: "true",
-        //         role: RoleEnum.ADMIN,
-        //     },
-        //     {
-        //         name: "Mary",
-        //         surname: "Smith",
-        //         email: "mary_smith@gmail.com",
-        //         password,
-        //         isActive: "true",
-        //         role: RoleEnum.USER,
-        //     },
-        //     {
-        //         name: "John",
-        //         surname: "Smith",
-        //         email: "jogn_smith@gmail.com",
-        //         password,
-        //         isActive: "true",
-        //         role: RoleEnum.USER,
-        //     },
-        //     {
-        //         name: "Max",
-        //         surname: "Ivanov",
-        //         email: "ivanov@gmail.com",
-        //         password,
-        //         isActive: "true",
-        //         role: RoleEnum.USER,
-        //     },
-        //     {
-        //         name: "Patrick",
-        //         surname: "Sponge",
-        //         email: "sponge@gmail.com",
-        //         password,
-        //         isActive: "true",
-        //         role: RoleEnum.USER,
-        //     },
-        // ]);
+        await User.insertMany([
+            {
+                name: "Admin",
+                surname: "Admin",
+                email: "admin@gmail.com",
+                password,
+                isActive: "true",
+                role: RoleEnum.ADMIN,
+            },
+            {
+                name: "Mary",
+                surname: "Smith",
+                email: "mary_smith@gmail.com",
+                password,
+                isActive: "true",
+                role: RoleEnum.USER,
+            },
+            {
+                name: "John",
+                surname: "Smith",
+                email: "jogn_smith@gmail.com",
+                password,
+                isActive: "true",
+                role: RoleEnum.USER,
+            },
+            {
+                name: "Max",
+                surname: "Ivanov",
+                email: "ivanov@gmail.com",
+                password,
+                isActive: "true",
+                role: RoleEnum.USER,
+            },
+            {
+                name: "Patrick",
+                surname: "Sponge",
+                email: "sponge@gmail.com",
+                password,
+                isActive: "true",
+                role: RoleEnum.USER,
+            },
+        ]);
 
         const procedures = await Procedure.insertMany([
             { name: "General Medical Consultation" },
@@ -96,7 +96,6 @@ async function seed2() {
             { name: "STD Testing" },
             { name: "Immunotherapy for Allergies" },
         ]);
-        console.log({ procedures });
         // Create doctors with procedures
         const doctors = await Doctor.insertMany([
             {

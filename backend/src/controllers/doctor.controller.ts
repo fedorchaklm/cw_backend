@@ -48,11 +48,6 @@ class DoctorController {
             const doctor = req.body as IDoctorCreateDTO;
             await doctorService.isEmailUnique(doctor.email);
             const data = await doctorService.create(doctor);
-            // await clinicService.addDoctorToClinics(data._id, doctor.clinics);
-            // await clinicService.addProcedureToClinic(
-            //     doctor.clinics,
-            //     doctor.procedures,
-            // );
             res.status(StatusCodesEnum.CREATED).json(data);
         } catch (e) {
             next(e);

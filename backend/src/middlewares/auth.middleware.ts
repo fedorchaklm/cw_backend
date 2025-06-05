@@ -11,7 +11,7 @@ import { userService } from "../services/user.service";
 class AuthMiddleware {
     public checkAccessToken = async (
         req: Request,
-        res: Response,
+        _: Response,
         next: NextFunction,
     ) => {
         try {
@@ -57,7 +57,6 @@ class AuthMiddleware {
             }
 
             req.res.locals.tokenPayload = tokenPayload;
-            // res.locals.tokenPayload = tokenPayload;
 
             next();
         } catch (e) {
@@ -67,7 +66,7 @@ class AuthMiddleware {
 
     public checkRefreshToken = async (
         req: Request,
-        res: Response,
+        _: Response,
         next: NextFunction,
     ) => {
         try {
@@ -98,7 +97,6 @@ class AuthMiddleware {
             );
 
             req.res.locals.tokenPayload = tokenPayload;
-            // res.locals.tokenPayload = tokenPayload;
 
             next();
         } catch (e) {

@@ -21,20 +21,6 @@ class UserRepository {
         return User.findByIdAndUpdate(id, user, { new: true });
     };
 
-    // public partialUpdateById = (
-    //     id: string,
-    //     user: Partial<IUser>,
-    // ): Promise<IUser | null> => {
-    //     return User.findByIdAndUpdate(id, user, { new: true });
-    // };
-    public blockUser = (id: string): Promise<IUser | null> => {
-        return User.findByIdAndUpdate(id, { isActive: false }, { new: true });
-    };
-
-    public unblockUser = (id: string): Promise<IUser | null> => {
-        return User.findByIdAndUpdate(id, { isActive: true }, { new: true });
-    };
-
     public deleteById = (id: string): Promise<IUser | null> => {
         return User.findByIdAndDelete(id);
     };

@@ -18,7 +18,6 @@ const UserSchema = new Schema(
         isActive: { type: Boolean, default: false },
         // isActive: { type: Boolean, default: true },
         isDeleted: { type: Boolean, default: false },
-        // IsVerified: { type: Boolean, default: false },
     },
     {
         timestamps: true,

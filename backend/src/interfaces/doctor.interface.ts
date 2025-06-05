@@ -8,10 +8,6 @@ export interface IDoctor extends IBase {
     email: string;
     phone: string;
     procedures: Array<string>;
-    // age: number;
-    // experience: number;
-    // clinics: Array<string>;
-    // isDeleted: boolean;
 }
 
 export interface IDoctorQuery {

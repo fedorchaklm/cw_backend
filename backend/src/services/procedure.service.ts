@@ -67,23 +67,6 @@ class ProcedureService {
         }
         return await procedureRepository.deleteById(procedureId);
     }
-
-    // public async getProceduresIdsFromNames(
-    //     procedureNames: Array<string>,
-    // ): Promise<Array<string>> {
-    //     const procedureIds = [];
-    //     for (const name of procedureNames) {
-    //         const procedure = await this.getByName(name);
-    //         if (!procedure) {
-    //             throw new ApiError(
-    //                 `Procedure '${name}' was not found`,
-    //                 StatusCodesEnum.NOT_FOUND,
-    //             );
-    //         }
-    //         procedureIds.push(procedure._id);
-    //     }
-    //     return procedureIds;
-    // }
 }
 
 export const procedureService = new ProcedureService();

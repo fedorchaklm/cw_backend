@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheckck
 import { FilterQuery, Types } from "mongoose";
 
 import {
@@ -143,7 +141,6 @@ class ClinicRepository {
     };
 
     public async getById(id: string) {
-        // return Clinic.findById(id).populate("doctors");
         const res = await Clinic.aggregate([
             {
                 $match: { _id: new Types.ObjectId(id) },
