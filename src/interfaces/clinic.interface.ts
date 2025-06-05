@@ -30,7 +30,7 @@ export interface IClinicQuery {
     name?: string;
     procedures?: string;
     doctors?: string;
-    // orderBy?: ClinicQueryOrderEnum;
+    orderBy?: "name";
 }
 
 export type IClinicCreateDTO = Omit<IClinic, "_id" | "createdAt" | "updatedAt">;

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import request from "supertest";
 import app, { startServer, stopServer } from "../../main";
 import mongoose from "mongoose";

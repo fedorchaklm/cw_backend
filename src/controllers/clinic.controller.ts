@@ -7,13 +7,13 @@ import {
     IClinicCreateDTO,
     IClinicQuery,
 } from "../interfaces/clinic.interface";
-import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
+// import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
 import { clinicService } from "../services/clinic.service";
 
 class ClinicController {
     public async getAll(
         req: Request,
-        res: Response<IPaginatedResponse<IClinic> | null>,
+        res: Response, //Response<IPaginatedResponse<IClinic> | null>,
         next: NextFunction,
     ) {
         try {
