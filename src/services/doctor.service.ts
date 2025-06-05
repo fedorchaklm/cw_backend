@@ -23,9 +23,10 @@ class DoctorService {
         };
     };
 
-    public async getById(id: string): Promise<IDoctor> {
+    public async getById(id: string): Promise<any> {
         const doctor = await doctorRepository.getById(id);
-        if (doctor === null) {
+        console.log({ doctor });
+        if (!doctor) {
             throw new ApiError(
                 `Doctor with such id ${id} not found!`,
                 StatusCodesEnum.NOT_FOUND,
@@ -44,7 +45,7 @@ class DoctorService {
     ): Promise<IDoctor> {
         const existedDoctor = await doctorRepository.getById(doctorId);
 
-        if (existedDoctor === null) {
+        if (!existedDoctor) {
             throw new ApiError(
                 `Doctor with such id ${doctorId} not found!`,
                 StatusCodesEnum.NOT_FOUND,
@@ -57,7 +58,7 @@ class DoctorService {
     public async deleteById(doctorId: string): Promise<IDoctor> {
         const doctor = await doctorRepository.getById(doctorId);
 
-        if (doctor === null) {
+        if (!doctor) {
             throw new ApiError(
                 `Doctor with such id ${doctorId} not found!`,
                 StatusCodesEnum.NOT_FOUND,

@@ -1,4 +1,4 @@
-import { FilterQuery } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 
 import {
     IDoctor,
@@ -92,8 +92,41 @@ class DoctorRepository {
             : res[0];
     };
 
-    public getById(id: string): Promise<IDoctor> {
-        return Doctor.findById(id).populate("procedures");
+    public async getById(id: string) {
+        // return Doctor.findById(id);
+        const res = await Doctor.aggregate([
+            {
+                $match: { _id: new Types.ObjectId(id) },
+            },
+            {
+                $lookup: {
+                    from: "clinics",
+                    let: { doctorId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $in: ["$$doctorId", "$doctors"] },
+                            },
+                        },
+                        {
+                            $project: { name: 1 },
+                        },
+                    ],
+                    as: "clinics",
+                },
+            },
+            {
+                $lookup: {
+                    from: "procedures",
+                    localField: "procedures",
+                    foreignField: "_id",
+                    as: "procedures",
+                    pipeline: [{ $project: { name: 1 } }],
+                },
+            },
+        ]);
+        console.log({ res });
+        return res[0];
     }
 
     public create(doctor: IDoctorCreateDTO): Promise<IDoctor> {
@@ -102,15 +135,12 @@ class DoctorRepository {
         return Doctor.create(doctor);
     }
 
-    public updateById(
+    public async updateById(
         doctorId: string,
         doctor: Partial<IDoctor>,
     ): Promise<IDoctor> {
-        return (
-            Doctor.findByIdAndUpdate(doctorId, doctor, { new: true })
-                // .populate("clinics")
-                .populate("procedures")
-        );
+        await Doctor.findByIdAndUpdate(doctorId, doctor, { new: true });
+        return await this.getById(doctorId);
     }
 
     public deleteById(doctorId: string): Promise<IDoctor> {

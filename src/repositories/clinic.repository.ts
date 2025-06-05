@@ -26,8 +26,6 @@ class ClinicRepository {
             orderObject.name = 1;
         }
 
-        console.log(">query", query);
-
         const res = await Clinic.aggregate([
             {
                 $match: filterObject,

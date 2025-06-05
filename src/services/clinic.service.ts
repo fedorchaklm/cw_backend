@@ -16,7 +16,6 @@ class ClinicService {
     public getAll = async (
         query: IClinicQuery,
     ): Promise<IPaginatedResponse<IClinic>> => {
-        // return await clinicRepository.getAll(query);
         const { data, totalItems } = await clinicRepository.getAll(query);
         const totalPages = Math.ceil(totalItems / query.pageSize);
         return {

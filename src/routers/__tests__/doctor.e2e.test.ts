@@ -221,6 +221,9 @@ describe("GET by id /doctors/:id", () => {
                 _id: createdProcedure.body._id,
                 name: createdProcedure.body.name,
             })],
+            clinics: [],
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
         });
     });
 
@@ -262,6 +265,9 @@ describe("PATCH by id /doctors/:id", () => {
             email: doctor.email,
             phone: doctor.phone,
             procedures: [],
+            clinics: [],
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
         });
     });
 
