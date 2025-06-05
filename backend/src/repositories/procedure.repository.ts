@@ -1,6 +1,5 @@
 import { FilterQuery } from "mongoose";
 
-import { OrderByEnum } from "../enums/query-order.enum";
 import {
     IProcedure,
     IProcedureCreateDTO,
@@ -17,12 +16,23 @@ class ProcedureRepository {
 
         if (query.name) {
             filterObject.name = { $regex: query.name, $options: "i" };
+
+            const orderObject: { [key: string]: 1 | -1 } = {};
+
+            if (query.orderBy === "name") {
+                orderObject.name = 1;
+            } else if (query.orderBy === "-name") {
+                orderObject.name = -1;
+            } else {
+                orderObject.name = 1;
+            }
         }
+
         return Promise.all([
             Procedure.find(filterObject)
                 .limit(query.pageSize)
                 .skip(skip)
-                .sort(OrderByEnum.NAME),
+                .sort({ name: 1 }),
             Procedure.find(filterObject).countDocuments(),
         ]);
     };

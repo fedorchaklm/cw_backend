@@ -71,7 +71,7 @@ class ClinicRepository {
                     },
                 },
                 // filter by doctor first
-                query.doctors != null && {
+                query.doctor != null && {
                     $match: {
                         $expr: {
                             $anyElementTrue: {
@@ -87,7 +87,7 @@ class ClinicRepository {
                                         ].map((field) => ({
                                             $regexMatch: {
                                                 input: `$$doc.${field}`,
-                                                regex: query.doctors, // example: /therapy/i
+                                                regex: query.doctor, // example: /therapy/i
                                                 options: "i",
                                             },
                                         })),
@@ -98,7 +98,7 @@ class ClinicRepository {
                     },
                 },
                 // filter by procedure name
-                query.procedures != null && {
+                query.procedure != null && {
                     $match: {
                         $expr: {
                             $anyElementTrue: {
@@ -108,7 +108,7 @@ class ClinicRepository {
                                     in: {
                                         $regexMatch: {
                                             input: "$$proc.name",
-                                            regex: query.procedures,
+                                            regex: query.procedure,
                                             options: "i",
                                         },
                                     },

@@ -482,13 +482,13 @@ export const swaggerDocument = {
                         schema: { type: "string" },
                     },
                     {
-                        name: "procedures",
+                        name: "procedure",
                         in: "query",
                         description: "name of procedure",
                         schema: { type: "string" },
                     },
                     {
-                        name: "doctors",
+                        name: "doctor",
                         in: "query",
                         description:
                             "firstName, lastName, email or phone of doctor",
@@ -1598,6 +1598,107 @@ export const swaggerDocument = {
                                 },
                             },
                         },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            patch: {
+                tags: ["Users"],
+                summary: "Update user by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Update user by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    surname: { type: "string" },
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    "200": {
+                        description: "Successfully update user",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        _id: { type: "string" },
+                                        name: { type: "string" },
+                                        surname: { type: "string" },
+                                        email: {
+                                            type: "string",
+                                        },
+                                        role: { type: "string" },
+                                        isActive: { type: "boolean" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "404": {
+                        description: "Not found",
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        status: {
+                                            type: "string",
+                                            default: 404,
+                                        },
+                                        message: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            delete: {
+                tags: ["Users"],
+                summary: "Delete user by id",
+                security: [{ bearerAuth: [] }],
+                parameters: [
+                    {
+                        name: "id",
+                        in: "path",
+                        description: "Delete user by id",
+                        schema: { type: "string" },
+                    },
+                ],
+                responses: {
+                    "204": {
+                        description: "Successfully delete user",
                     },
                     "404": {
                         description: "Not found",

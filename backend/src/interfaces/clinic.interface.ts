@@ -10,9 +10,9 @@ export interface IClinicQuery {
     pageSize: number;
     page: number;
     name?: string;
-    procedures?: string;
-    doctors?: string;
-    orderBy?: "name";
+    procedure?: string;
+    doctor?: string;
+    orderBy?: string;
 }
 
 export type IClinicCreateDTO = Omit<IClinic, "_id" | "createdAt" | "updatedAt">;
