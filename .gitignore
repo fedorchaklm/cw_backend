@@ -10,3 +10,4 @@ node_modules
 .env.dev
 
 mongo_db/
+/backend/dist/

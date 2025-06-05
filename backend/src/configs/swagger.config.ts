@@ -541,44 +541,6 @@ export const swaggerDocument = {
                                                     updatedAt: {
                                                         type: "string",
                                                     },
-                                                    doctors: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "object",
-                                                            properties: {
-                                                                _id: {
-                                                                    type: "string",
-                                                                },
-                                                                firstName: {
-                                                                    type: "string",
-                                                                },
-                                                                lastName: {
-                                                                    type: "string",
-                                                                },
-                                                                email: {
-                                                                    type: "string",
-                                                                },
-                                                                phone: {
-                                                                    type: "string",
-                                                                },
-                                                                procedures: {
-                                                                    type: "array",
-                                                                    items: {
-                                                                        type: "object",
-                                                                        properties:
-                                                                            {
-                                                                                _id: {
-                                                                                    type: "string",
-                                                                                },
-                                                                                name: {
-                                                                                    type: "string",
-                                                                                },
-                                                                            },
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                    },
                                                 },
                                             },
                                         },
@@ -622,43 +584,6 @@ export const swaggerDocument = {
                                     properties: {
                                         _id: { type: "string" },
                                         name: { type: "string" },
-                                        doctors: {
-                                            type: "array",
-                                            items: {
-                                                type: "object",
-                                                properties: {
-                                                    _id: {
-                                                        type: "string",
-                                                    },
-                                                    firstName: {
-                                                        type: "string",
-                                                    },
-                                                    lastName: {
-                                                        type: "string",
-                                                    },
-                                                    email: {
-                                                        type: "string",
-                                                    },
-                                                    phone: {
-                                                        type: "string",
-                                                    },
-                                                    procedures: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "object",
-                                                            properties: {
-                                                                _id: {
-                                                                    type: "string",
-                                                                },
-                                                                name: {
-                                                                    type: "string",
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
                                         procedures: {
                                             type: "array",
                                             items: {
@@ -727,43 +652,6 @@ export const swaggerDocument = {
                                     properties: {
                                         _id: { type: "string" },
                                         name: { type: "string" },
-                                        doctors: {
-                                            type: "array",
-                                            items: {
-                                                type: "object",
-                                                properties: {
-                                                    _id: {
-                                                        type: "string",
-                                                    },
-                                                    firstName: {
-                                                        type: "string",
-                                                    },
-                                                    lastName: {
-                                                        type: "string",
-                                                    },
-                                                    email: {
-                                                        type: "string",
-                                                    },
-                                                    phone: {
-                                                        type: "string",
-                                                    },
-                                                    procedures: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "object",
-                                                            properties: {
-                                                                _id: {
-                                                                    type: "string",
-                                                                },
-                                                                name: {
-                                                                    type: "string",
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
                                         procedures: {
                                             type: "array",
                                             items: {
@@ -849,43 +737,6 @@ export const swaggerDocument = {
                                     properties: {
                                         _id: { type: "string" },
                                         name: { type: "string" },
-                                        doctors: {
-                                            type: "array",
-                                            items: {
-                                                type: "object",
-                                                properties: {
-                                                    _id: {
-                                                        type: "string",
-                                                    },
-                                                    firstName: {
-                                                        type: "string",
-                                                    },
-                                                    lastName: {
-                                                        type: "string",
-                                                    },
-                                                    email: {
-                                                        type: "string",
-                                                    },
-                                                    phone: {
-                                                        type: "string",
-                                                    },
-                                                    procedures: {
-                                                        type: "array",
-                                                        items: {
-                                                            type: "object",
-                                                            properties: {
-                                                                _id: {
-                                                                    type: "string",
-                                                                },
-                                                                name: {
-                                                                    type: "string",
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
                                         procedures: {
                                             type: "array",
                                             items: {
