@@ -4,7 +4,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "tsc-watch --onSuccess \"npm run watch:server\"",
+    "start": "rimraf dist && tsc-watch --onSuccess \"npm run watch:server\"",
     "dev": "rimraf dist && tsc-watch --onSuccess \"cross-env NODE_ENV=dev npm run watch:server\"",
     "watch:server": "tsx src/main.ts --watch",
     "test": "cross-env NODE_ENV=test jest --maxWorkers=1"

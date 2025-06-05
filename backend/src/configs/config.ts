@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 const environment = process.env.NODE_ENV ?? "production";
 
 dotenv.config({
-    path: `.env.${environment}`,
+    path: `../.env.${environment}`,
 });
 
 interface IConfig {
