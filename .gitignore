@@ -11,3 +11,4 @@ node_modules
 
 mongo_db/
 /backend/dist/
+/backend/src/db/
