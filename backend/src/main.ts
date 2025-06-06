@@ -32,7 +32,7 @@ process.on("uncaughtException", (err) => {
 
 const dbConnection = async () => {
     try {
-        console.log("Connecting to DB...", config.MONGO_URI);
+        console.log("Connecting to DB...");
         await mongoose.connect(config.MONGO_URI);
         console.log("MongoDB connected successfully");
     } catch (e) {
