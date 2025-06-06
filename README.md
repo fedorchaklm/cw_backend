@@ -1,37 +1,22 @@
-# NodeJS API clinic application
+# NodeJS API Clinic application
 
-You can find how to work with API clinic into SWAGGER
-
-Available *mode* options:
-
-- `production`
-- `development`
-- `test`
-
-You need to create .env.${mode} and respectively configure them, looking up to .env.example
+Backend application using NodeJS, Express, MongoDB
 
 ## Running App in Docker
 
-Install [Docker](https://docs.docker.com/)
-
-
-To build an image use this command<br/>
-`docker compose build`
-
-Then you can start the container<br/>
-`docker compose up`
-
-Also you can use single command to build and run the container</br>
-`docker compose up --build`
+- Install [Docker](https://docs.docker.com/)
+- Provide `.env.production` environment variables by example `.env.example`
+- Run `docker compose up --build`
 
 ## Running App locally
 
-Install [NodeJS](https://nodejs.org/en) <br/>
-Install Mongo dababase locally [MongoDB Compass](https://www.mongodb.com/products/tools/compass) <br/>
-cd ./backend
-
-Install packages `npm i`
-
+- Install [NodeJS](https://nodejs.org/en)
+- Install MongoDB locally [MongoDB Compass](https://www.mongodb.com/products/tools/compass) <br/>
+- Go to app folder `cd ./backend`
+- Install packages `npm i`
+- Provide `.env.dev` environment variables by example `.env.example`
 - `npm run dev` starts app on localhost `PORT` using database `MONGO_URI`
 
+### Running tests
+- Provide `.env.test` environment variables by example `.env.example`
 - `npm run test` running integration tests using database `MONGO_URI`
