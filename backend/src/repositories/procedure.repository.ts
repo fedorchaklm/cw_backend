@@ -16,23 +16,25 @@ class ProcedureRepository {
 
         if (query.name) {
             filterObject.name = { $regex: query.name, $options: "i" };
+        }
 
-            const orderObject: { [key: string]: 1 | -1 } = {};
+        const orderObject: { [key: string]: 1 | -1 } = {};
 
-            if (query.orderBy === "name") {
-                orderObject.name = 1;
-            } else if (query.orderBy === "-name") {
-                orderObject.name = -1;
+        if (query.orderBy) {
+            if (query.orderBy.startsWith("-")) {
+                orderObject[query.orderBy.slice(1)] = -1;
             } else {
-                orderObject.name = 1;
+                orderObject[query.orderBy] = 1;
             }
+        } else {
+            orderObject.name = 1;
         }
 
         return Promise.all([
             Procedure.find(filterObject)
+                .sort(orderObject)
                 .limit(query.pageSize)
-                .skip(skip)
-                .sort({ name: 1 }),
+                .skip(skip),
             Procedure.find(filterObject).countDocuments(),
         ]);
     };

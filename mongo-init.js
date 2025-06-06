@@ -1,3 +1,5 @@
+import { RoleEnum } from "./backend/src/enums/role.enum";
+
 db.createUser(
     {
         user: "user",

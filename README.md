@@ -1,4 +1,6 @@
-# NodeJS Api clinic application
+# NodeJS API clinic application
+
+You can find how to work with API clinic into SWAGGER
 
 Available *mode* options:
 

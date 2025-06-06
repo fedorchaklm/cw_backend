@@ -19,10 +19,12 @@ class ClinicRepository {
 
         const orderObject: { [key: string]: 1 | -1 } = {};
 
-        if (query.orderBy === "name") {
-            orderObject.name = 1;
-        } else if (query.orderBy === "-name") {
-            orderObject.name = -1;
+        if (query.orderBy) {
+            if (query.orderBy.startsWith("-")) {
+                orderObject[query.orderBy.slice(1)] = -1;
+            } else {
+                orderObject[query.orderBy] = 1;
+            }
         } else {
             orderObject.name = 1;
         }
